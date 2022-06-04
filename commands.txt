@@ -1,0 +1,9 @@
+py manage.py makemigrations --dry-run --verbosity 3
+py manage.py runserver
+py manage.py createsuperuser 
+pip install coverage
+#this command is for testing 
+coverage run --omit='*/venv/*' manage.py test
+# this is a command to see the testing status
+coverage html
+pip install djangorestframework
