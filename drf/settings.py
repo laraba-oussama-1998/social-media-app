@@ -126,8 +126,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # for more detail about permessions go to https://www.django-rest-framework.org/api-guide/permissions/
 # IsAuthenticated permessions tested
+
+# Permissions:
+# AllowAny
+# IsAuthenticated
+# IsAdminUser
+# IsAuthenticatedOrReadOnly
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ]
 }
