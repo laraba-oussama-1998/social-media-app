@@ -4,6 +4,12 @@ class Api_consuming:
     def __init__(self, endpoint):
         self.endpoint = endpoint
 
+    def login(self,username,password):
+        auth_response = requests.post(self.endpoint[:-1]+"-auth/login/",
+                                      json={'username': username, 'password': password})
+        print(self.endpoint[:-1] + "-auth/login/?next=/api/")
+        return auth_response.status_code
+
     def get_list(self):
 
         get_response = requests.get(self.endpoint)  # HTTP Request
@@ -45,7 +51,8 @@ if __name__ == "__main__":
 
     consume = Api_consuming('http://localhost:8000/api/')
     data = {'title': 'blog title', 'author': 1, 'excerpt': 'blog excerpt', 'content': 'blog content'}
-    consume.get_list()
+    #print(consume.login('admin','admin'))
+    #print(consume.get_list())
     #print(consume.create_blog(data))
     #print(consume.blog_detail(2))
     #print(consume.update_blog(1,3))
