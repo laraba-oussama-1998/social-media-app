@@ -7,3 +7,6 @@ coverage run --omit='*/venv/*' manage.py test
 # this is a command to see the testing status
 coverage html
 pip install djangorestframework
+
+#this for the drf docs
+pip install pyyaml 

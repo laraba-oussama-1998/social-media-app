@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -21,8 +22,8 @@ class Post(models.Model):
         ('published', 'Published'),
     )
     category = models.ForeignKey(
-        Category, on_delete=models.PROTECT, default=1)#.PROTECT Is used for that when we deleting category
-                                                    # the post doesn't delete
+        Category, on_delete=models.PROTECT, default=1)  #.PROTECT Is used for that when we deleting category
+                                                        #the post doesn't delete
     title = models.CharField(max_length=250)
     excerpt = models.TextField(null=True)
     content = models.TextField()
@@ -30,7 +31,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=250, unique_for_date='published')
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='blog_posts')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
     status = models.CharField(
         max_length=10, choices=options, default='published')
     objects = models.Manager()  # default manager this will have no effect if he comes alone

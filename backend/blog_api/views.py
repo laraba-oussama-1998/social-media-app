@@ -2,13 +2,16 @@ from django.shortcuts import render,get_object_or_404
 from rest_framework import generics
 from .models import Post
 from .api.serializers import PostSerializer
+
 from rest_framework.permissions import SAFE_METHODS,BasePermission,IsAuthenticatedOrReadOnly\
                                         ,IsAuthenticated,DjangoModelPermissionsOrAnonReadOnly
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+
 # create custom permissions to allow post editing only for authors
 # SAFE_METHODS includes reading permission like heads option and get
+
 class PostUserWritePermission(BasePermission):
 
     def has_object_permission(self, request, view, obj):
@@ -19,19 +22,36 @@ class PostUserWritePermission(BasePermission):
         return obj.author == request.user
 
 
+# let's now use the model viewsets
+class PostList(viewsets.ModelViewSet):
+    permission_classes = [PostUserWritePermission]
+    serializer_class = PostSerializer
+
+    def get_object(self, queryset = None, **kwargs):
+        # here the pk is reference to the url arguments not the primary key of the post model
+        # we can access it by the kwargs
+        item = self.kwargs.get('pk')
+        # here choose the field. in our example we will use title as url pk
+        return get_object_or_404(Post, id = item)
+
+    def get_queryset(self):
+        return Post.postobjects.all()
+
+
+
 # creation of the viewsets views
-class PostList(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = Post.postobjects.all()
-
-    def list(self, request):
-        serializer_class = PostSerializer(self.queryset, many=True)
-        return Response(serializer_class.data)
-
-    def retrieve(self, request, pk=None):
-        post = get_object_or_404(self.queryset, pk=pk)
-        serializer_class = PostSerializer(post)
-        return Response(serializer_class.data)
+# class PostList(viewsets.ViewSet):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Post.postobjects.all()
+#
+#     def list(self, request):
+#         serializer_class = PostSerializer(self.queryset, many=True)
+#         return Response(serializer_class.data)
+#
+#     def retrieve(self, request, pk=None):
+#         post = get_object_or_404(self.queryset, pk=pk)
+#         serializer_class = PostSerializer(post)
+#         return Response(serializer_class.data)
 
     # methods that could be implement when using viewsets
     # def list(self, request):
