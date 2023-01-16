@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.forms import TextInput, Textarea, CharField
 from django import forms
 from django.db import models
+from .models import Profile, FollowerRelation
 
 
 class UserAdminConfig(UserAdmin):
@@ -30,3 +31,5 @@ class UserAdminConfig(UserAdmin):
 
 
 admin.site.register(NewUser, UserAdminConfig)
+admin.site.register(Profile)
+admin.site.register(FollowerRelation)

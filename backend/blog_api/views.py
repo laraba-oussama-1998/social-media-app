@@ -1,10 +1,11 @@
 from django.shortcuts import render,get_object_or_404
 from rest_framework import generics
 from .models import Post
-from .api.serializers import PostSerializer
+from .serializers import PostSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from rest_framework.permissions import SAFE_METHODS,BasePermission,IsAuthenticatedOrReadOnly\
-                                        ,IsAuthenticated,DjangoModelPermissionsOrAnonReadOnly
+                                        ,IsAuthenticated,DjangoModelPermissionsOrAnonReadOnly,AllowAny
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -23,8 +24,8 @@ class PostUserWritePermission(BasePermission):
 
 
 # let's now use the model viewsets
-class PostList(viewsets.ModelViewSet):
-    permission_classes = [PostUserWritePermission]
+class PostView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly, PostUserWritePermission]
     serializer_class = PostSerializer
 
     def get_object(self, queryset = None, **kwargs):
@@ -32,10 +33,14 @@ class PostList(viewsets.ModelViewSet):
         # we can access it by the kwargs
         item = self.kwargs.get('pk')
         # here choose the field. in our example we will use title as url pk
-        return get_object_or_404(Post, id = item)
+        obj = get_object_or_404(Post, id = item)
+        
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     def get_queryset(self):
         return Post.postobjects.all()
+
 
 
 

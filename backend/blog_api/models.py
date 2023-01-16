@@ -34,6 +34,8 @@ class Post(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
     status = models.CharField(
         max_length=10, choices=options, default='published')
+    image = models.ImageField(upload_to="blogs_image", blank=True, null=True)
+    
     objects = models.Manager()  # default manager this will have no effect if he comes alone
     postobjects = PostObjects()  # custom manager is used to when we get the data we show only published data
     # and it's helpling us to won't filter the data that aren't published in the view. so the published objects

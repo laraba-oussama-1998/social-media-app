@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from users.models import NewUser
 from blog_api.models import Post,Category
 
 # Create your tests here.
@@ -11,8 +11,8 @@ class Test_Create_Post(TestCase):
         test_category = Category.objects.create(name='django')
         test_category.save()
 
-        testuser1 = User.objects.create_user(
-            username='test_user1', password='123456789')
+        testuser1 = NewUser.objects.create_superuser(
+            email="a@a.com",user_name='test_user1',first_name="mohamed", password='123456789')
         testuser1.save()
 
         test_post = Post.objects.create(
