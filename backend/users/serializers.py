@@ -62,15 +62,20 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = [
-            "first_name",
             "id",
+            "user_name",
+            "first_name",
+            "avatar",
             "about",
             "adresse",
-            "avatar",
+            "mobile",
+            "birthday",
+            "facebook_link",
+            "instagram_link",
+            "twitter_link",
             "follower_count",
             "following_count",
             "is_following",
-            "user_name",
         ]
         
     def get_is_following(self, obj):
@@ -85,9 +90,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     def get_first_name(self, obj):
         return obj.user.first_name
-    
-    def get_last_name(self, obj):
-        return obj.user.last_name
+
     
     def get_user_name(self, obj):
         return obj.user.user_name

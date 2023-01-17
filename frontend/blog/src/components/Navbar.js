@@ -12,8 +12,9 @@ import { selectUser, isUserLoggedIn } from '../redux/reducers/auth/authSlice';
 
 const Navbar = () => {
     
-    const user = useSelector(selectUser)
-    const isloggedin = useSelector(isUserLoggedIn)
+    const user = useSelector(selectUser);
+    const isloggedin = useSelector(isUserLoggedIn);
+    
     /* useEffect(()=>{
         if (localStorage.getItem('access_token')){
             setLoggedIn(true);

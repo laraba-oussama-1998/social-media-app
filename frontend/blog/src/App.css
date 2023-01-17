@@ -720,6 +720,9 @@ width: 20px;
 margin-top: 5px ;
 }
 
+.field-size{
+    font-size: 1.5rem;
+}
 
 .center-container{
     display: flex;
@@ -743,7 +746,17 @@ a{
     font-size: 1rem;
 }
 
-
+.card .file-input{
+    position: absolute;
+    margin: auto;
+    padding: 0;
+    height: inherit;
+    outline: none;
+    opacity: 0;
+    right: 18%;
+    left: 18%;
+    width: 64%;
+}
 
 /* reset password page*/
 

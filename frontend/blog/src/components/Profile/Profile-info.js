@@ -1,62 +1,94 @@
-const ProfileInfo = () => {
+import { useState } from "react";
+import axiosInstance from '../../axios/authaxios';
+
+const ProfileInfo = ({profile}) => {
+
+    const [formData, setFormData] = useState(profile);
+
+    const handleChange = (e)=>{
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+    
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+    }
     return ( 
 
         <div className="card mb-4">
-            <div className="card-header">Account Details</div>
+            
                 <div className="card-body">
 
                 <form>
                         
-                        <div className="mb-3">
-                            <label className="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
-                            <input className="form-control" id="inputUsername" type="text" placeholder="Enter your username"  />
-                        </div>
-                        
                         <div className="row gx-3 mb-3">
                             
                             <div className="col-md-6">
-                                <label className="small mb-1" for="inputFirstName">First name</label>
-                                <input className="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" />
+                                <label className="small mb-1"  htmlFor="inputUsername">Username</label>
+                                <input className="form-control field-size" id="inputUsername" type="text"
+                                required
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                placeholder="Enter your username"  />
                             </div>
                             
                             <div className="col-md-6">
-                                <label className="small mb-1" for="inputLastName">Last name</label>
-                                <input className="form-control" id="inputLastName" type="text" placeholder="Enter your last name" />
-                            </div>
-                        </div>
-                        
-                        <div className="row gx-3 mb-3">
-                            
-                            <div className="col-md-6">
-                                <label className="small mb-1" for="inputOrgName">Organization name</label>
-                                <input className="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" />
-                            </div>
-                            
-                            <div className="col-md-6">
-                                <label className="small mb-1" for="inputLocation">Location</label>
-                                <input className="form-control" id="inputLocation" type="text" placeholder="Enter your location"  />
+                                <label className="small mb-1"  htmlFor="inputFirstName">First name</label>
+                                <input className="form-control field-size" id="inputFirstName" type="text"
+                                name="firstname"
+                                value={formData.firstname}
+                                onChange={handleChange}
+                                placeholder="Enter your first name" />
                             </div>
                         </div>
                         
                         <div className="mb-3">
-                            <label className="small mb-1" for="inputEmailAddress">Email address</label>
-                            <input className="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="name@example.com" />
+                            <label className="small mb-1"  htmlFor="inputAbout">About</label>
+                            <textarea className="form-control field-size" id="inputAbout" type="text"
+                            required
+                            name="about"
+                            value={formData.about}
+                            onChange={handleChange}
+                            placeholder="about"  />
+                        </div>
+
+                        <div className="mb-3">
+                            <label className="small mb-1"  htmlFor="inputAddress">Address</label>
+                            <input className="form-control field-size" id="inputAddress" type="text"
+                            required
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            placeholder="type your address"  />
                         </div>
                         
                         <div className="row gx-3 mb-3">
                             
                             <div className="col-md-6">
-                                <label className="small mb-1" for="inputPhone">Phone number</label>
-                                <input className="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="555-123-4567" />
+                                <label className="small mb-1"  htmlFor="inputMobile">Mobile</label>
+                                <input className="form-control field-size" id="inputMobile" type="text"
+                                name="mobile"
+                                value={formData.mobile}
+                                onChange={handleChange}
+                                placeholder="Enter your mobile number" />
                             </div>
-                            
+
                             <div className="col-md-6">
-                                <label className="small mb-1" for="inputBirthday">Birthday</label>
-                                <input className="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="06/10/1988" />
+                                <label className="small mb-1"  htmlFor="inputBirthday">Birthday</label>
+                                <input className="form-control field-size" id="inputBirthday" type="date"
+                                name="birthday"
+                                value={formData.birthday}
+                                onChange={handleChange} 
+                                placeholder="Enter your birthday" />
                             </div>
                         </div>
+                        
                         <div className="text-center">
-                            <button className="btn btn-primary" type="button">Save changes</button>
+                            <button className="btn btn-primary fs-3 my-3" type="button"
+                            onClick={handleSubmit}>Save changes</button>
                         </div>
                     </form>
 
