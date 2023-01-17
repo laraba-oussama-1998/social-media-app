@@ -9,7 +9,7 @@ import { selectUser } from "../redux/reducers/auth/authSlice";
 const ProfileUpdate = () => {
     const user = useSelector(selectUser);
     const card = {
-        avatar: user.avatar,
+        avatar:{ preview: user.avatar, file: ""  },
 		facebook$link: user.facebook_link,
 		instagram$link: user.instagram_link,
         twitter$link: user.twitter_link,
@@ -24,6 +24,7 @@ const ProfileUpdate = () => {
         birthday: user.birthday
     }
 
+    
     return ( 
 
         <div>

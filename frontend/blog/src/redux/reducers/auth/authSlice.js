@@ -16,7 +16,9 @@ const authSlice = createSlice({
             state.user =  {...payload, avatar : base_url.concat(payload.avatar)};
         },
         updateUser: (state,{payload}) =>{
-            state.user = {...state.user, payload}
+            
+            state.user = {...state.user, ...payload}
+            
         }
     },
 })

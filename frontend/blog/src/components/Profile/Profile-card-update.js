@@ -17,11 +17,16 @@ const ProfileCardUpdate = ({username, card}) => {
     };
     
     const handleUpload = (e)=>{
+        
         setFormData({
             ...formData,
-            [e.target.name]: URL.createObjectURL(e.target.files[0]),
+            avatar:{ preview: URL.createObjectURL(e.target.files[0]),
+                    file: e.target.files[0]}
+
         });
+        
     }
+    
     
     const handlesubmit = (e) =>{
         e.preventDefault();
@@ -32,12 +37,18 @@ const ProfileCardUpdate = ({username, card}) => {
             )
         )
         
-        axiosInstance.patch("/user/profile/"+username,data)
+        if (data.avatar.file === ""){
+            delete data.avatar
+        }else{
+            data.avatar = data.avatar.file
+        }
+        axiosInstance.defaults.headers['content-type'] = 'multipart/form-data';
+        axiosInstance.patch("/user/profile/"+username+"/",data)
         .then((res)=>{
+            data.avatar = URL.createObjectURL(data.avatar)
             dispatch(updateUser(data));
             
         }).catch((err)=>{
-            console.log("hello error")
             
             console.log(err)
         })
@@ -50,7 +61,7 @@ const ProfileCardUpdate = ({username, card}) => {
                     <div className="card-body pt-2 pb-2">
                         <div className="card-body text-center">
                         <div className="thumb-lg member-thumb mx-auto ">
-                            <img src={formData.avatar}
+                            <img src={formData.avatar.preview}
                                 className="rounded-circle img-thumbnail"
                                 height="150"
                                 width="150"
