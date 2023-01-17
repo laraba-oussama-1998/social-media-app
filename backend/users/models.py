@@ -57,7 +57,7 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.user_name
     
-    
+
 class FollowerRelation(models.Model):
     user = models.ForeignKey(NewUser, on_delete=models.CASCADE)
     profile = models.ForeignKey("Profile", on_delete=models.CASCADE)

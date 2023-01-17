@@ -14,6 +14,7 @@ const ProfileInfo = ({profile}) => {
     
     const handleSubmit = (e)=>{
         e.preventDefault();
+        axiosInstance.put("/user/profile/"+formData.username+"/", formData)
     }
     return ( 
 
@@ -45,6 +46,30 @@ const ProfileInfo = ({profile}) => {
                             </div>
                         </div>
                         
+
+                        <div className="row gx-3 mb-3">
+                            
+                            <div className="col-md-6">
+                                <label className="small mb-1"  htmlFor="inputEmail">Email</label>
+                                <input className="form-control field-size" id="inputAddress" type="email"
+                                required
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="type your email"  />
+                            </div>
+
+                            <div className="col-md-6">
+                                <label className="small mb-1"  htmlFor="inputAddress">Address</label>
+                                <input className="form-control field-size" id="inputAddress" type="text"
+                                required
+                                name="address"
+                                value={formData.address}
+                                onChange={handleChange}
+                                placeholder="type your address"  />
+                            </div>
+                        </div>
+
                         <div className="mb-3">
                             <label className="small mb-1"  htmlFor="inputAbout">About</label>
                             <textarea className="form-control field-size" id="inputAbout" type="text"
@@ -54,16 +79,7 @@ const ProfileInfo = ({profile}) => {
                             onChange={handleChange}
                             placeholder="about"  />
                         </div>
-
-                        <div className="mb-3">
-                            <label className="small mb-1"  htmlFor="inputAddress">Address</label>
-                            <input className="form-control field-size" id="inputAddress" type="text"
-                            required
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            placeholder="type your address"  />
-                        </div>
+                        
                         
                         <div className="row gx-3 mb-3">
                             

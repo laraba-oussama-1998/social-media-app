@@ -50,12 +50,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return instance
     
     
-
-class ProfileSerializer(serializers.ModelSerializer):
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewUser
+        fields = ["user_name", "first_name", "email"]
     
-    first_name = serializers.SerializerMethodField(read_only=True)
+class ProfileSerializer(serializers.ModelSerializer):
+
+    user = UpdateUserSerializer()
     is_following = serializers.SerializerMethodField(read_only=True)
-    user_name = serializers.SerializerMethodField(read_only=True)
     follower_count = serializers.SerializerMethodField(read_only=True)
     following_count = serializers.SerializerMethodField(read_only=True)
     
@@ -63,8 +66,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = [
             "id",
-            "user_name",
-            "first_name",
+            "user",
             "avatar",
             "about",
             "adresse",
@@ -77,7 +79,25 @@ class ProfileSerializer(serializers.ModelSerializer):
             "following_count",
             "is_following",
         ]
+    
+    def update(self, instance, validated_data):
         
+        # this for the update profil card because it didn't need the user data
+        try:
+            user = validated_data.pop('user')
+            user_instance = NewUser.objects.get(user_name=instance.user.user_name)
+            user_instance.user_name = user.get("user_name")
+            user_instance.first_name = user.get("first_name")
+            user_instance.email = user.get("email")
+            user_instance.save()
+        except: 
+            print("no user data need to change")
+        
+        
+        instance = super().update(instance, validated_data)
+        return instance
+    
+    
     def get_is_following(self, obj):
         # request???
         is_following = False
@@ -88,12 +108,11 @@ class ProfileSerializer(serializers.ModelSerializer):
             is_following = user in obj.followers.all()
         return is_following
     
-    def get_first_name(self, obj):
+    """def get_first_name(self, obj):
         return obj.user.first_name
-
     
     def get_user_name(self, obj):
-        return obj.user.user_name
+        return obj.user.user_name"""
     
     def get_following_count(self, obj):
         return obj.user.following.count()

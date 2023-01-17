@@ -1,4 +1,3 @@
-import { SocialIcon } from 'react-social-icons';
 import { useState } from 'react';
 import axiosInstance from '../../axios/authaxios';
 import { selectUser, updateUser } from '../../redux/reducers/auth/authSlice';
@@ -45,7 +44,8 @@ const ProfileCardUpdate = ({username, card}) => {
         axiosInstance.defaults.headers['content-type'] = 'multipart/form-data';
         axiosInstance.patch("/user/profile/"+username+"/",data)
         .then((res)=>{
-            data.avatar = URL.createObjectURL(data.avatar)
+            
+            data.avatar = res.data.avatar
             dispatch(updateUser(data));
             
         }).catch((err)=>{

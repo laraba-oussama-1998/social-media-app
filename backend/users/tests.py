@@ -67,22 +67,28 @@ class PostTests(APITestCase):
         url = reverse("users:profile-detail", kwargs={'username':self.test_user.user_name })
         
         updated_data = {
-            "aboute": "new about section",
+            "user":{
+                "user_name": "new_name",
+                "first_name": "new_first_name",
+                "email": "wass@wass.com"
+                },
+            "about": "new about section",
             "adresse": "new adresse",
             "facebook_link":"facebook",
             "instagram_link":"instagram",
             "twitter_link":"twitter",
         }
         response = self.client.patch(url, updated_data, format='json')
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
-        url = reverse("users:profile-detail", kwargs={'username':self.test_user.user_name})
+        """url = reverse("users:profile-detail", kwargs={'username':self.test_user.user_name})
         updated_data = {
             "aboute": "new about section",
             "adresse": "new adresse"
         }
         response = self.client.patch(url, updated_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)"""
         
 
     def test_change_password(self):

@@ -13,11 +13,13 @@ const authSlice = createSlice({
     reducers:{
         getUser: (state, {payload}) =>{
             state.isloggedin = true;
-            state.user =  {...payload, avatar : base_url.concat(payload.avatar)};
+            state.user =  {...payload , avatar : base_url.concat(payload.avatar)};
+            
         },
         updateUser: (state,{payload}) =>{
             
             state.user = {...state.user, ...payload}
+            
             
         }
     },

@@ -8,6 +8,7 @@ import { selectUser } from "../redux/reducers/auth/authSlice";
 
 const ProfileUpdate = () => {
     const user = useSelector(selectUser);
+    
     const card = {
         avatar:{ preview: user.avatar, file: ""  },
 		facebook$link: user.facebook_link,
@@ -15,9 +16,10 @@ const ProfileUpdate = () => {
         twitter$link: user.twitter_link,
 	};
 
-    const profile = {
-        username: user.user_name,
-        firstname: user.first_name,
+    const profile_info = {
+        username: user.user.user_name,
+        firstname: user.user.first_name,
+        email: user.user.email,
         about: user.about,
         address: user.adresse,
         mobile: user.mobile,
@@ -32,7 +34,7 @@ const ProfileUpdate = () => {
 
             <div className="container mt-5 fs-4">
             <div className="row">
-                <ProfileCardUpdate username={user.user_name} card={card}/>
+                <ProfileCardUpdate username={user.user.user_name} card={card}/>
 
                 <div className="col-lg-8">
                     <div className="card">
@@ -51,7 +53,7 @@ const ProfileUpdate = () => {
                             </ul>
                             <div className="tab-content" id="myTabContent">
                                 <div className="tab-pane fade show active" id="profile-info" role="tabpanel" aria-labelledby="profile-tab">
-                                    <ProfileInfo profile={profile}/>
+                                    <ProfileInfo profile={profile_info}/>
                                 </div>
                                 <div className="tab-pane fade" id="security" role="tabpanel" aria-labelledby="contact-tab">
                                     <ProfileSecurity />
