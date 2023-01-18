@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axiosInstance from '../../axios/authaxios';
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../redux/reducers/auth/authSlice";
 
-const ProfileInfo = ({profile}) => {
+const ProfileInfo = ({username,profile}) => {
 
     const [formData, setFormData] = useState(profile);
-
+    const dispatch = useDispatch()
     const handleChange = (e)=>{
         setFormData({
             ...formData,
@@ -12,9 +14,23 @@ const ProfileInfo = ({profile}) => {
         });
     };
     
+    console.log(profile)
+    
     const handleSubmit = (e)=>{
         e.preventDefault();
-        axiosInstance.put("/user/profile/"+formData.username+"/", formData)
+
+        const data = {...formData, user:{first_name: formData.firstname,
+            last_name:formData.lastname}};
+        delete data.lastname;
+        delete data.firstname;
+
+        axiosInstance.patch("/user/profile/"+username+"/", data)
+        .then((res)=>{
+            dispatch(updateUser(data));
+            console.log(res)
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
     return ( 
 
@@ -27,22 +43,22 @@ const ProfileInfo = ({profile}) => {
                         <div className="row gx-3 mb-3">
                             
                             <div className="col-md-6">
-                                <label className="small mb-1"  htmlFor="inputUsername">Username</label>
-                                <input className="form-control field-size" id="inputUsername" type="text"
+                                <label className="small mb-1"  htmlFor="inputFirstname">First name</label>
+                                <input className="form-control field-size" id="inputFirstname" type="text"
                                 required
-                                name="username"
-                                value={formData.username}
-                                onChange={handleChange}
-                                placeholder="Enter your username"  />
-                            </div>
-                            
-                            <div className="col-md-6">
-                                <label className="small mb-1"  htmlFor="inputFirstName">First name</label>
-                                <input className="form-control field-size" id="inputFirstName" type="text"
                                 name="firstname"
                                 value={formData.firstname}
                                 onChange={handleChange}
-                                placeholder="Enter your first name" />
+                                placeholder="Enter your firstname"  />
+                            </div>
+                            
+                            <div className="col-md-6">
+                                <label className="small mb-1"  htmlFor="inputLastName">Last name</label>
+                                <input className="form-control field-size" id="inputLastName" type="text"
+                                name="lastname"
+                                value={formData.lastname}
+                                onChange={handleChange}
+                                placeholder="Enter your last name" />
                             </div>
                         </div>
                         
@@ -50,21 +66,20 @@ const ProfileInfo = ({profile}) => {
                         <div className="row gx-3 mb-3">
                             
                             <div className="col-md-6">
-                                <label className="small mb-1"  htmlFor="inputEmail">Email</label>
-                                <input className="form-control field-size" id="inputAddress" type="email"
-                                required
-                                name="email"
-                                value={formData.email}
+                                <label className="small mb-1"  htmlFor="inputProfession">Profession</label>
+                                <input className="form-control field-size" id="inputProfession" type="text"
+                                name="profession"
+                                value={formData.profession}
                                 onChange={handleChange}
-                                placeholder="type your email"  />
+                                placeholder="type your profession"  />
                             </div>
 
                             <div className="col-md-6">
-                                <label className="small mb-1"  htmlFor="inputAddress">Address</label>
-                                <input className="form-control field-size" id="inputAddress" type="text"
+                                <label className="small mb-1"  htmlFor="inputAdresse">Address</label>
+                                <input className="form-control field-size" id="inputAdresse" type="text"
                                 required
-                                name="address"
-                                value={formData.address}
+                                name="adresse"
+                                value={formData.adresse}
                                 onChange={handleChange}
                                 placeholder="type your address"  />
                             </div>

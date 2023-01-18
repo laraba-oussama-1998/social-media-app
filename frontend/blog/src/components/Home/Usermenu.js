@@ -8,9 +8,8 @@ const Usermenu = ({user}) => {
     const navigate = useNavigate()
 
 
-    const username= user.user.user_name,
+    const username= user.user_name,
         avatar = user.avatar;
-    console.log(avatar)
     const handlelogout = (e)=>{
 
         axiosInstance.

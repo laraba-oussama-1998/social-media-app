@@ -123,9 +123,20 @@ class FollowView(APIView):
 class ChangeUserPasswordView(mixins.UpdateModelMixin,
                     viewsets.GenericViewSet):
     
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserPasswordSerializer
     queryset = NewUser.objects.all()
+    lookup_field = "user_name"
+    
+    def get_object(self, queryset = None, **kwargs):
+        # here the pk is reference to the url arguments not the primary key of the post model
+        # we can access it by the kwargs
+        item = self.kwargs.get('user_name')
+        # here choose the field. in our example we will use title as url pk
+        obj = get_object_or_404(NewUser, user_name = item)
+        
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 

@@ -1,8 +1,10 @@
 import axios from 'axios';
 import axiosConfig from "./axios";
+import { useNavigate } from 'react-router-dom';
 
 const baseURL = axiosConfig.baseURL;
 const axiosInstance = axios.create(axiosConfig);
+
 
 axiosInstance.interceptors.response.use(
 	(response) => {
@@ -10,7 +12,7 @@ axiosInstance.interceptors.response.use(
 	},
 	async function (error) {
 		const originalRequest = error.config;
-
+		const navigate = useNavigate();
 		if (typeof error.response === 'undefined') {
 			alert(
 				'A server/network error occurred. ' +
@@ -43,9 +45,10 @@ axiosInstance.interceptors.response.use(
 				// exp date in token is expressed in seconds, while now() returns milliseconds:
 				const now = Math.ceil(Date.now() / 1000);
 				console.log(tokenParts.exp);
+				console.log(now);
 
 				if (tokenParts.exp > now) {
-					console.log(refreshToken)
+					
 					return axiosInstance
 						.post('/token/refresh/', { refresh: refreshToken })
 						.then((response) => {
@@ -64,10 +67,12 @@ axiosInstance.interceptors.response.use(
 				} else {
 					console.log('Refresh token is expired', tokenParts.exp, now);
 					window.location.href = '/login/';
+					navigate('/login')
 				}
 			} else {
 				console.log('Refresh token not available.');
 				window.location.href = '/login/';
+				navigate('/login')
 			}
 		}
 

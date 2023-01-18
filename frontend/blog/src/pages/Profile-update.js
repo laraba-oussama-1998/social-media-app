@@ -17,11 +17,11 @@ const ProfileUpdate = () => {
 	};
 
     const profile_info = {
-        username: user.user.user_name,
         firstname: user.user.first_name,
-        email: user.user.email,
+        lastname: user.user.last_name,
+        profession: user.profession,
         about: user.about,
-        address: user.adresse,
+        adresse: user.adresse,
         mobile: user.mobile,
         birthday: user.birthday
     }
@@ -34,7 +34,7 @@ const ProfileUpdate = () => {
 
             <div className="container mt-5 fs-4">
             <div className="row">
-                <ProfileCardUpdate username={user.user.user_name} card={card}/>
+                <ProfileCardUpdate username={user.user_name} card={card}/>
 
                 <div className="col-lg-8">
                     <div className="card">
@@ -53,10 +53,10 @@ const ProfileUpdate = () => {
                             </ul>
                             <div className="tab-content" id="myTabContent">
                                 <div className="tab-pane fade show active" id="profile-info" role="tabpanel" aria-labelledby="profile-tab">
-                                    <ProfileInfo profile={profile_info}/>
+                                    <ProfileInfo username={user.user_name} profile={profile_info}/>
                                 </div>
                                 <div className="tab-pane fade" id="security" role="tabpanel" aria-labelledby="contact-tab">
-                                    <ProfileSecurity />
+                                    <ProfileSecurity username={user.user_name}/>
                                 </div>
                             </div>
                         </div>

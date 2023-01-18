@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axiosInstance from '../../axios/authaxios';
-import { selectUser, updateUser } from '../../redux/reducers/auth/authSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { updateUser } from '../../redux/reducers/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
 const ProfileCardUpdate = ({username, card}) => {
 

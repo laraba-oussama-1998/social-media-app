@@ -68,9 +68,8 @@ class PostTests(APITestCase):
         
         updated_data = {
             "user":{
-                "user_name": "new_name",
+                "last_name": "new_name",
                 "first_name": "new_first_name",
-                "email": "wass@wass.com"
                 },
             "about": "new about section",
             "adresse": "new adresse",
@@ -94,7 +93,8 @@ class PostTests(APITestCase):
     def test_change_password(self):
         
         print("test change password")
-        url = reverse("users:change_password-detail", kwargs={'pk': 1})
+        url = reverse("users:change_password-detail", kwargs={'user_name':self.test_user.user_name})
+        
         passwords = {
             "current_password":"123456789",
             "new_password": "1234",

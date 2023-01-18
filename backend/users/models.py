@@ -43,6 +43,7 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
     start_date = models.DateTimeField(default=timezone.now)
     about = models.TextField(_(
         'about'), max_length=500, blank=True)
@@ -70,6 +71,7 @@ class Profile(models.Model):
         ('female','Female')
     )
     user = models.OneToOneField(NewUser, on_delete=models.CASCADE)
+    profession = models.CharField(max_length=150, blank=True)
     about = models.TextField(blank=True, null=True)
     adresse = models.CharField(max_length=220, blank=True, null=True)
     mobile = models.IntegerField(blank=True, null=True)
