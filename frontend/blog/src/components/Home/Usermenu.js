@@ -2,11 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import {FaUserAlt, FaCog, FaSignOutAlt} from 'react-icons/fa';
 import axiosInstance from '../../axios/authaxios';
 import { Link } from 'react-router-dom';
-
+import { logout } from '../../redux/reducers/auth/authSlice';
+import { useDispatch } from 'react-redux';
 const Usermenu = ({user}) => {
 
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const username= user.user_name,
         avatar = user.avatar;
@@ -14,11 +15,12 @@ const Usermenu = ({user}) => {
 
         axiosInstance.
         post(`user/logout/blacklist/`, {
-			refresh_token: localStorage.getItem('refresh_token'),
+			refresh_token: localStorage.getItem('refresh_token')
 
 		}).then((res)=>{
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
+                dispatch(logout(null));
                 navigate('/login');
             });
 		

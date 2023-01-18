@@ -16,11 +16,13 @@ const authSlice = createSlice({
             state.user =  {...payload , avatar : base_url.concat(payload.avatar)};
             
         },
+
         updateUser: (state,{payload}) =>{
-            
             state.user = {...state.user, ...payload}
-            
-            
+        },
+
+        logout: (state, {payload}) =>{
+            state.isloggedin = false
         }
     },
 })
@@ -28,6 +30,6 @@ const authSlice = createSlice({
 export const selectUser = (state) => state.auth.user;
 export const isUserLoggedIn = (state) => state.auth.isloggedin;
 
-export const {getUser, updateUser} = authSlice.actions;
+export const {getUser, updateUser, logout} = authSlice.actions;
 
 export default authSlice.reducer;
