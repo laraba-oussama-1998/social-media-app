@@ -50,29 +50,58 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return instance
     
     
-
-class ProfileSerializer(serializers.ModelSerializer):
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewUser
+        fields = ["first_name", "last_name"]
     
-    first_name = serializers.SerializerMethodField(read_only=True)
-    is_following = serializers.SerializerMethodField(read_only=True)
+class ProfileSerializer(serializers.ModelSerializer):
+
+    user = UpdateUserSerializer()
     user_name = serializers.SerializerMethodField(read_only=True)
+    is_following = serializers.SerializerMethodField(read_only=True)
     follower_count = serializers.SerializerMethodField(read_only=True)
     following_count = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Profile
         fields = [
-            "first_name",
             "id",
+            "user_name",
+            "user",
+            "avatar",
+            "profession",
             "about",
             "adresse",
-            "avatar",
+            "mobile",
+            "birthday",
+            "facebook_link",
+            "instagram_link",
+            "twitter_link",
             "follower_count",
             "following_count",
             "is_following",
-            "user_name",
         ]
+    
+    def update(self, instance, validated_data):
         
+        # this for the update profil card because it didn't need the user data
+        
+        try:
+            user = validated_data.pop('user')
+            user_instance = NewUser.objects.get(user_name=instance.user.user_name)
+            user_instance.first_name = user.get("first_name")
+            user_instance.last_name = user.get("last_name")
+            user_instance.save()
+        
+        except: 
+            print("no user data need to change")
+        
+        
+        instance = super().update(instance, validated_data)
+        return instance
+    
+    
     def get_is_following(self, obj):
         # request???
         is_following = False
@@ -83,11 +112,9 @@ class ProfileSerializer(serializers.ModelSerializer):
             is_following = user in obj.followers.all()
         return is_following
     
-    def get_first_name(self, obj):
+    """def get_first_name(self, obj):
         return obj.user.first_name
-    
-    def get_last_name(self, obj):
-        return obj.user.last_name
+    """
     
     def get_user_name(self, obj):
         return obj.user.user_name
@@ -118,11 +145,18 @@ class UserPasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Confirm password don't match the password.")
         return attrs
     
-    def validate_recent_password(self, recent_password):
+    def validate_current_password(self, current_password):
         user = self.context['request'].user
-        if not user.check_password(recent_password):
-            raise serializers.ValidationError("The Current passwor is wrong !!")
-        return recent_password
+        if not user.check_password(current_password):
+            raise serializers.ValidationError("The Current password is wrong !!")
+        return current_password
+    
+    def update(self,instance, validated_data):
+        
+        password = validated_data.pop("new_password")
+        instance.set_password(password)
+        instance.save()
+        return instance
 
 class FollowSerializer(serializers.ModelSerializer):
     

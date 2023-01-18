@@ -8,10 +8,8 @@ const Usermenu = ({user}) => {
     const navigate = useNavigate()
 
 
-    const id = user.id,
-        username= user.user_name,
+    const username= user.user_name,
         avatar = user.avatar;
-
     const handlelogout = (e)=>{
 
         axiosInstance.
@@ -60,7 +58,7 @@ const Usermenu = ({user}) => {
                         <FaUserAlt className='profile-icons' />
                     </div>
                     <div className="d-inline ">
-                        <Link className="dropdown-item" to={`/profile/${id}`}>My profile</Link>
+                        <Link className="dropdown-item" to={`/profile/${username}`}>My profile</Link>
                     </div>
                     
                 </div>
@@ -72,7 +70,7 @@ const Usermenu = ({user}) => {
                             <FaCog className='profile-icons' />
                         </div>
                         <div className="d-inline ">
-                            <Link className="dropdown-item" to={`/update-profile/${id}`}>Settings</Link>
+                            <Link className="dropdown-item" to={`/profile-update/${username}`}>Settings</Link>
                         </div>
                         
                     </div>

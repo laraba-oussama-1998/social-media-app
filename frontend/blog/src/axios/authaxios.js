@@ -1,8 +1,10 @@
 import axios from 'axios';
 import axiosConfig from "./axios";
+import { useNavigate } from 'react-router-dom';
 
 const baseURL = axiosConfig.baseURL;
 const axiosInstance = axios.create(axiosConfig);
+
 
 axiosInstance.interceptors.response.use(
 	(response) => {
@@ -10,7 +12,7 @@ axiosInstance.interceptors.response.use(
 	},
 	async function (error) {
 		const originalRequest = error.config;
-
+		const navigate = useNavigate();
 		if (typeof error.response === 'undefined') {
 			alert(
 				'A server/network error occurred. ' +
@@ -37,36 +39,40 @@ axiosInstance.interceptors.response.use(
 			const refreshToken = localStorage.getItem('refresh_token');
 
 			if (refreshToken) {
+				
 				const tokenParts = JSON.parse(atob(refreshToken.split('.')[1]));
 
 				// exp date in token is expressed in seconds, while now() returns milliseconds:
 				const now = Math.ceil(Date.now() / 1000);
 				console.log(tokenParts.exp);
+				console.log(now);
 
 				if (tokenParts.exp > now) {
+					
 					return axiosInstance
 						.post('/token/refresh/', { refresh: refreshToken })
 						.then((response) => {
 							localStorage.setItem('access_token', response.data.access);
-							localStorage.setItem('refresh_token', response.data.refresh);
 
 							axiosInstance.defaults.headers['Authorization'] =
 								'JWT ' + response.data.access;
 							originalRequest.headers['Authorization'] =
 								'JWT ' + response.data.access;
-
 							return axiosInstance(originalRequest);
 						})
 						.catch((err) => {
+							console.log("refresh token didn't came")
 							console.log(err);
 						});
 				} else {
 					console.log('Refresh token is expired', tokenParts.exp, now);
 					window.location.href = '/login/';
+					navigate('/login')
 				}
 			} else {
 				console.log('Refresh token not available.');
 				window.location.href = '/login/';
+				navigate('/login')
 			}
 		}
 

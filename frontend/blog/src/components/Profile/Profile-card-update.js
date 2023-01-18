@@ -1,61 +1,117 @@
-import { SocialIcon } from 'react-social-icons';
+import { useState } from 'react';
+import axiosInstance from '../../axios/authaxios';
+import { updateUser } from '../../redux/reducers/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
-const ProfileCardUpdate = () => {
+const ProfileCardUpdate = ({username, card}) => {
+
+    const [formData, setFormData] = useState(card);
+    const dispatch = useDispatch();
+
+    const handleChange = (e)=>{
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+    
+    const handleUpload = (e)=>{
+        
+        setFormData({
+            ...formData,
+            avatar:{ preview: URL.createObjectURL(e.target.files[0]),
+                    file: e.target.files[0]}
+
+        });
+        
+    }
+    
+    
+    const handlesubmit = (e) =>{
+        e.preventDefault();
+        const data = Object.fromEntries(
+            Object.entries(formData).map(([key, value]) => 
+              // Modify key here
+            [key.replace("$","_"), value]
+            )
+        )
+        
+        if (data.avatar.file === ""){
+            delete data.avatar
+        }else{
+            data.avatar = data.avatar.file
+        }
+        axiosInstance.defaults.headers['content-type'] = 'multipart/form-data';
+        axiosInstance.patch("/user/profile/"+username+"/",data)
+        .then((res)=>{
+            
+            data.avatar = res.data.avatar
+            dispatch(updateUser(data));
+            
+        }).catch((err)=>{
+            
+            console.log(err)
+        })
+    }
     return ( 
 
         <div className="col-lg-4">
-                <div className="text-center card">
+                <div className="card">
+                    
                     <div className="card-body pt-2 pb-2">
-                        <div className="thumb-lg member-thumb mx-auto">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar2.png"
+                        <div className="card-body text-center">
+                        <div className="thumb-lg member-thumb mx-auto ">
+                            <img src={formData.avatar.preview}
                                 className="rounded-circle img-thumbnail"
                                 height="150"
                                 width="150"
-                                alt="profile-image"/></div>
-                        <div className="mt-3">
-
-                        <button type="button" className="btn btn-primary m-3 btn-rounded waves-effect w-md waves-light">Upload image</button>
-                        
-                            <h4>Freddie J. Plourde</h4>
-                            <p className="text-muted">@Founder <span>| </span><span><a href="#" className="text-pink">websitename.com</a></span></p>
+                                alt="profile-image"/>
+                        </div>
+                        <div className="fs-4 my-3  btn btn-outline-primary text-center">
+                            <input type="file" id="myFile" name="avatar"  className='file-input'
+                            
+                            onChange={handleUpload}/>
+                            Upload New image
                         </div>
 
-                        <ul className="social-links list-inline mt-4">
-                            <li className="list-inline-item mx-3"><a title="" data-placement="top" data-toggle="tooltip" className="tooltips" href="" data-original-title="Facebook"><SocialIcon network="facebook" style={{ height: 40, width: 40 }}/></a></li>
-                            <li className="list-inline-item mx-3"><a title="" data-placement="top" data-toggle="tooltip" className="tooltips" href="" data-original-title="Twitter"><SocialIcon network="instagram" style={{ height: 40, width: 40 }}/></a></li>
-                            <li className="list-inline-item mx-3"><a title="" data-placement="top" data-toggle="tooltip" className="tooltips" href="" data-original-title="Skype"><SocialIcon network="twitter" style={{ height: 40, width: 40 }}/></a></li>
-                        </ul>
+                        </div>
+                        <div className="mb-3">
+                            <label className="small mb-1"  htmlFor="inputFacebookLink">Facebook link</label>
+                            <input className="form-control field-size" id="inputFacebookLink" type="text"
+                            name='facebook$link'
+                            value={formData.facebook$link}
+                            onChange={handleChange}
+                            placeholder="Enter your facebook link"  />
+                        </div>
 
-                        <button type="button" className="btn btn-primary m-3 btn-rounded waves-effect w-md waves-light">Follow</button>
-                        <div className="my-4">
-                            <div className="row">
-                                <div className="col-4 border-end border-2">
-                                
-                                    <div className="m-2">
-                                        
-                                        <h4>2563</h4>
-                                        <p className="mb-0 text-muted">Followers</p>
-                                        
-                                    </div>
-                                
-                                </div>
-                                <div className="col-4 border-end border-2">
-                                    <div className="m-2">
-                                        <h4>6952</h4>
-                                        <p className="mb-0 text-muted">Following</p>
-                                    </div>
-                                </div>
-                                <div className="col-4">
-                                    <div className="m-2">
-                                        <h4>1125</h4>
-                                        <p className="mb-0 text-muted">Posts</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="mb-3">
+                            <label className="small mb-1"  htmlFor="inputInstagramLink">instagram link</label>
+                            <input className="form-control field-size" id="inputInstagramLink" type="text" 
+                            name="instagram$link"
+                            value={formData.instagram$link}
+                            onChange={handleChange}
+                            placeholder="Enter your instgram link"  />
+                        </div>
+
+                        <div className="mb-3">
+                            <label className="small mb-1"  htmlFor="inputTwitterLink">twitter link</label>
+                            <input className="form-control field-size" id="inputTwitterLink" type="text" 
+                            name='twitter$link'
+                            value={formData.twitter$link}
+                            onChange={handleChange}
+                            placeholder="Enter your username"  />
+                        </div>
+                            
+
+                        <div className='text-center'>
+                            <button type="button" 
+                            className="btn btn-primary fs-3 my-3 btn-rounded waves-effect w-md waves-light"
+                            onClick={handlesubmit}>Save changes</button>
+                        </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            
 
      );
 }

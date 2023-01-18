@@ -13,7 +13,14 @@ const authSlice = createSlice({
     reducers:{
         getUser: (state, {payload}) =>{
             state.isloggedin = true;
-            state.user =  {...payload, avatar : base_url.concat(payload.avatar)};
+            state.user =  {...payload , avatar : base_url.concat(payload.avatar)};
+            
+        },
+        updateUser: (state,{payload}) =>{
+            
+            state.user = {...state.user, ...payload}
+            
+            
         }
     },
 })
@@ -21,6 +28,6 @@ const authSlice = createSlice({
 export const selectUser = (state) => state.auth.user;
 export const isUserLoggedIn = (state) => state.auth.isloggedin;
 
-export const {getUser} = authSlice.actions;
+export const {getUser, updateUser} = authSlice.actions;
 
 export default authSlice.reducer;
