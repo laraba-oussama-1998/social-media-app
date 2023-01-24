@@ -38,6 +38,10 @@ class PostTests(APITestCase):
             author_id=1, status='published')
         
         self.test_post_2 = Post.objects.create(
+            category_id=1, title='Post Title', excerpt='Post Excerpt', content='Post Content', slug='post-title',
+            author_id=1, status='draft')
+        
+        self.test_post_3 = Post.objects.create(
             category_id=1, title='Post Title 2', excerpt='Post Excerpt 2', content='Post Content 2', slug='post-title 2',
             author_id=2, status='published')
     
@@ -55,7 +59,9 @@ class PostTests(APITestCase):
         #url = reverse('blog_api:lists') # the app name and the view name
         response = self.client.get(url, format = 'json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Post.objects.count(),2)
+        self.assertEqual(Post.objects.count(),3)
+        # ensure the post view return only the published
+        self.assertEqual(Post.objects.published().count(),len(response.data))
 
 
     def test_get_post(self):
@@ -98,7 +104,7 @@ class PostTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         # update other user his post
-        url = reverse('blog_api:blogs-detail', kwargs={'pk': 2})
+        url = reverse('blog_api:blogs-detail', kwargs={'pk': 3})
         
         response = self.client.put(
             url, updated_data, format='multipart')
@@ -117,9 +123,22 @@ class PostTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         
         # delete other user post
-        url = reverse('blog_api:blogs-detail', kwargs={'pk': 2})
+        url = reverse('blog_api:blogs-detail', kwargs={'pk': 3})
         
         response = self.client.delete(url)
         
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
             
+
+    def test_get_user_post(self):
+        print("test get user posts")
+        url = reverse('blog_api:blogs-userposts', kwargs={'pk': "aaaa"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+        
+        url = reverse('blog_api:blogs-userposts', kwargs={'pk': "test_user1"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # ensure we get he published and draft posts
+        self.assertEqual(len(response.data),2)

@@ -26,7 +26,7 @@ const Main = () => {
                 </div>
             </div>
         
-        <PostList />
+        <PostList url="blog"/>
 
         </div>
     );

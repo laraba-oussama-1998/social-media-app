@@ -68,7 +68,7 @@ class Profile(models.Model):
     
     gender_options = (
         ('male','Male'),
-        ('female','Female')
+        ('female','Female') 
     )
     user = models.OneToOneField(NewUser, on_delete=models.CASCADE)
     profession = models.CharField(max_length=150, blank=True)

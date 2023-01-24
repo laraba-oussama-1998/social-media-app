@@ -31,6 +31,7 @@ const Login = () => {
                 
                 dispatch(getUser(jwtDecode(localStorage.getItem('access_token'))["profile"]));
                 
+                
                 navigate('/');
 				//console.log(res);
 				//console.log(res.data);

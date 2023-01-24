@@ -34,7 +34,7 @@ const Register = () => {
 
     const handleSubmit = (e) => {
 		e.preventDefault();
-        try {
+        
             axios
 			.post(baseURL+`user/register/`, {
 				user_name: formData.username,
@@ -43,7 +43,6 @@ const Register = () => {
                 confirm_password: formData.confirm_password,
 			})
 			.then((res) => {
-                try{
                     axiosInstance
                     .post(`token/`, {
                         email: formData.email,
@@ -55,19 +54,17 @@ const Register = () => {
                         axiosInstance.defaults.headers['Authorization'] =
                             'JWT ' + localStorage.getItem('access_token');
                         
-                        dispatch(getUser(jwtDecode(localStorage.getItem('access_token')["profile"])))
+                        dispatch(getUser(jwtDecode(localStorage.getItem('access_token'))["profile"]));
                         navigate('/profile')
                         //console.log(res);
                         //console.log(res.data);
-                    });
-            } catch(logerr){
-                console.log(formData.email," ",formData.password)
-            }
+                    }).catch((logerr)=>{
+                        console.log(formData.email," ",formData.password)
+                    })
 
+            }).catch((ex) =>{
+                console.log(ex.response.data)
             });
-        } catch (ex) {
-            console.log(ex.response.data)
-        };
     };
 
     return ( 

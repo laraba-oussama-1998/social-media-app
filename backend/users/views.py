@@ -9,6 +9,8 @@ from .serializers import (CustomUserSerializer,
                             UserPasswordSerializer,
                             FollowSerializer,
                             CustomTokenObtainPairSerializer)
+from blog_api.serializers import PostSerializer
+
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import (BasePermission,
                                         SAFE_METHODS,
@@ -76,6 +78,7 @@ class ProfileView(viewsets.ModelViewSet):
         return obj
     
     
+    
     @action(detail=True, methods=['post'])
     def follow(self, request, username):
     
@@ -97,6 +100,8 @@ class ProfileView(viewsets.ModelViewSet):
         
         return Response(status=200)
     
+
+
 class FollowView(APIView):
     permission_classes = [IsAuthenticated]
     

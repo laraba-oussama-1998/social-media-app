@@ -1,8 +1,8 @@
-const BlogDetail = () => {
+const PostDetail = () => {
     return ( 
         <>
         </>
     );
 }
  
-export default BlogDetail;
+export default PostDetail;

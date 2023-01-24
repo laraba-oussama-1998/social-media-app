@@ -4,14 +4,37 @@ from users.serializers import ProfileSerializer
 import json
 class PostSerializer(serializers.ModelSerializer):
     
-    author_obj = serializers.SerializerMethodField(read_only=True)
     
+    category = serializers.SerializerMethodField(read_only= True)
+    username = serializers.SerializerMethodField(read_only= True)
+    avatar = serializers.SerializerMethodField(read_only= True)
+    profession = serializers.SerializerMethodField(read_only= True)
     class Meta:
         model = Post
         #choose what data you need it
-        fields = ('id', 'title', 'author','author_obj', 'excerpt', 'content', 'status', 'image') 
-        
+        fields = (  'id',
+                    'author',
+                    'username',
+                    'avatar',
+                    'profession',
+                    'title',
+                    'content',
+                    'category',
+                    'status',
+                    'image') 
     
-    def get_author_obj(self, obj):
-        
-        return ProfileSerializer(obj.author.profile).data
+    def get_category(self,obj):
+        return obj.category.name
+    
+    def get_username(self,obj):
+        return obj.author.user_name
+    
+    def get_avatar(self,obj):
+        request = self.context.get('request')
+        photo_url = obj.author.profile.avatar.url
+        return request.build_absolute_uri(photo_url)
+    
+    def get_profession(self,obj):
+        return obj.author.profile.profession
+    
+    

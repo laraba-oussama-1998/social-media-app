@@ -28,7 +28,7 @@ const Navbar = () => {
         <nav className="navbar">
 
             <FaBars className='bell'/>
-            <Link className= 'link' href="/home">
+            <Link className= 'link' to="/">
                 <h1>READER</h1>
             </Link>
             

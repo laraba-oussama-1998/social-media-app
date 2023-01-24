@@ -60,8 +60,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UpdateUserSerializer()
     user_name = serializers.SerializerMethodField(read_only=True)
     is_following = serializers.SerializerMethodField(read_only=True)
-    follower_count = serializers.SerializerMethodField(read_only=True)
+    followers_count = serializers.SerializerMethodField(read_only=True)
     following_count = serializers.SerializerMethodField(read_only=True)
+    posts_number = serializers.SerializerMethodField(read_only= True)
     
     class Meta:
         model = Profile
@@ -78,9 +79,10 @@ class ProfileSerializer(serializers.ModelSerializer):
             "facebook_link",
             "instagram_link",
             "twitter_link",
-            "follower_count",
+            "followers_count",
             "following_count",
             "is_following",
+            "posts_number"
         ]
     
     def update(self, instance, validated_data):
@@ -122,8 +124,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_following_count(self, obj):
         return obj.user.following.count()
     
-    def get_follower_count(self, obj):
+    def get_followers_count(self, obj):
         return obj.followers.count()
+    
+    def get_posts_number(self,obj):
+        return obj.user.user_posts.published().count()
 
 
 class UserPasswordSerializer(serializers.ModelSerializer):

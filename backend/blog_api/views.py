@@ -8,6 +8,7 @@ from rest_framework.permissions import SAFE_METHODS,BasePermission,IsAuthenticat
                                         ,IsAuthenticated,DjangoModelPermissionsOrAnonReadOnly,AllowAny
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 
 # create custom permissions to allow post editing only for authors
@@ -39,7 +40,20 @@ class PostView(viewsets.ModelViewSet):
         return obj
 
     def get_queryset(self):
-        return Post.postobjects.all()
+        return Post.objects.published()
+    
+    @action(detail=True, methods=['get'])
+    def userposts(self, request, pk=None):
+    
+        user = request.user
+        user_posts = Post.objects.filter(author__user_name=pk)
+        
+        if not user_posts.exists():
+            return Response({"detail": "User not found"}, status=404)
+        serializer = self.get_serializer(user_posts.all(), many=True) 
+        
+        return Response(serializer.data)
+
 
 
 

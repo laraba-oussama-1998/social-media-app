@@ -61,6 +61,13 @@ class PostTests(APITestCase):
         self.assertEqual(NewUser.objects.count(), Profile.objects.count())
         
 
+    def test_profile_retrieve(self):
+        print("test profile retrieve with username")
+        url = reverse("users:profile-detail", kwargs={'username':self.test_user.user_name })
+        response = self.client.get(url, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
     def test_profile_update(self):
         
         print("test user and profile update")
@@ -138,6 +145,7 @@ class PostTests(APITestCase):
         
         
         url = reverse("users:profile-follow", kwargs={"username":self.test_user_2.user_name})
+        print(url)
         data = {
             "action" : "follow"
         }

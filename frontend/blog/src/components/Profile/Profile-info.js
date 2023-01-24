@@ -14,7 +14,6 @@ const ProfileInfo = ({username,profile}) => {
         });
     };
     
-    console.log(profile)
     
     const handleSubmit = (e)=>{
         e.preventDefault();

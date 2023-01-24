@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.conf import settings
@@ -11,6 +12,25 @@ class Category(models.Model):
         return self.name
 
 
+class PostQuerySet(models.QuerySet):
+    def search(self, query=None):
+        if query is None or query == "":
+            return self.none()
+        lookups = Q(title__icontains=query) | Q(content__icontains=query)
+        return self.filter(lookups) 
+    
+class PostManager(models.Manager):
+    
+    def get_queryset(self):
+        return PostQuerySet(self.model, using=self._db)
+
+    def search(self, query=None):
+        return self.get_queryset().search(query=query)
+    
+    def published(self, query=None):
+        return self.get_queryset().filter(status='published')
+    
+    
 class Post(models.Model):
 
     class PostObjects(models.Manager):
@@ -31,12 +51,12 @@ class Post(models.Model):
     slug = models.SlugField(max_length=250, unique_for_date='published')
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_posts')
     status = models.CharField(
         max_length=10, choices=options, default='published')
     image = models.ImageField(upload_to="blogs_image", blank=True, null=True)
     
-    objects = models.Manager()  # default manager this will have no effect if he comes alone
+    objects = PostManager()  # default manager this will have no effect if he comes alone
     postobjects = PostObjects()  # custom manager is used to when we get the data we show only published data
     # and it's helpling us to won't filter the data that aren't published in the view. so the published objects
     # are on postobjects and postobjects is going to treated like object in orm
