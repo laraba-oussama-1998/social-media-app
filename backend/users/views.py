@@ -99,7 +99,6 @@ class ProfileView(viewsets.ModelViewSet):
             
         
         return Response(status=200)
-    
 
 
 class FollowView(APIView):

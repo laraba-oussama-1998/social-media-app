@@ -1,5 +1,5 @@
 import useFetch from "../../hooks/useFetch";
-import Post from "./post";
+import Post from "./Post";
 
 const PostList = ({url}) => {
     const {data: posts, isPending, error} = useFetch(url);

@@ -1,14 +1,13 @@
 from django.shortcuts import render,get_object_or_404
-from rest_framework import generics
 from .models import Post
 from .serializers import PostSerializer
-from rest_framework.parsers import MultiPartParser, FormParser
-
 from rest_framework.permissions import SAFE_METHODS,BasePermission,IsAuthenticatedOrReadOnly\
                                         ,IsAuthenticated,DjangoModelPermissionsOrAnonReadOnly,AllowAny
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
+from rest_framework.views import APIView
 
 
 # create custom permissions to allow post editing only for authors
@@ -54,6 +53,33 @@ class PostView(viewsets.ModelViewSet):
         
         return Response(serializer.data)
 
+
+class LikeView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, post_id):
+    
+        user = request.user
+        post_to_like = Post.objects.filter(id=post_id)
+        
+        if not post_to_like.exists():
+            return Response({"detail": "Post not found"}, status=404)
+
+        action = request.data['action']
+        post_to_like = post_to_like.first()
+        if post_to_like != user:
+            
+            if action == "like":
+                post_to_like.likes.add(user)
+            elif action == "unlike":
+                post_to_like.likes.remove(user)
+            
+        post = Post.objects.filter(id=post_id).first()
+        
+        
+        serializer = PostSerializer(post, context={'request': request})
+        
+        return Response(serializer.data)
 
 
 

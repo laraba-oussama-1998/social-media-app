@@ -142,3 +142,33 @@ class PostTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # ensure we get he published and draft posts
         self.assertEqual(len(response.data),2)
+        
+        
+    def test_like_post(self):
+        print("test user likes posts")
+        self.test_post_3.likes.add(self.test_user)
+        posts_liked_by_user_1 = self.test_user.liked_posts.all()
+        print(posts_liked_by_user_1)
+        qs = posts_liked_by_user_1.filter(id= self.test_post_3.id)
+        seconde_post_has_no_likes = self.test_post_2.likes.all()
+        self.assertTrue(qs.exists())
+        self.assertFalse(seconde_post_has_no_likes.exists())
+        
+        url = reverse('blog_api:like', kwargs={'post_id':2})
+        data={ 
+                "action": "like"
+            }
+        response = self.client.post(url,data,format="json")
+        print(response)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        posts_liked_by_user_1 = self.test_user.liked_posts.all()
+        self.assertEqual(posts_liked_by_user_1.count(), 2)
+        
+        url = reverse('blog_api:like', kwargs={'post_id':2})
+        data={ 
+                "action": "unlike"
+            }
+        response = self.client.post(url,data,format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        

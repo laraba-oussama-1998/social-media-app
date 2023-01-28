@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import moment from 'moment';
 
 
 const Post = ({post}) => {
     const base_url = "http://localhost:8000"
+    const now = new Date();
     return ( 
         <>
         <div className="blog-post" >
@@ -13,7 +15,7 @@ const Post = ({post}) => {
                             <div  className="blog-post__author-info">
                                 <h4 className="blog-post__author__name">
                                     {post.username}
-                                    
+                                    <span className="blog-post__author__bio"> {moment(post.date).fromNow()}</span>
                                 </h4>
                                 <h5 className="blog-post__author__bio">
                                     {post.profession}
@@ -21,14 +23,15 @@ const Post = ({post}) => {
                             </div>
                         </div>
                     </Link>
-                    <a href="/blog/<%= blog._id %>">
+                    <Link to={'/profile/'+post.username+'/'+post.id}>
                         <h1 className="blog-post__title">
                             {post.title}
                         </h1>
-                    </a>
-                    <p className="blog-post__text">
-                        {post.content}
+                    
+                        <p className="blog-post__text">
+                            {post.content}
                         </p>
+                    </Link>
                     <a href="#" className="blog-post__btn">{post.category}</a>
                     <a href="#" className="blog-post__btn">4 min read</a>
                 </div>

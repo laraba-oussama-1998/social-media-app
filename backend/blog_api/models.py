@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Q
-from django.contrib.auth.models import User
+from users.models import NewUser
 from django.utils import timezone
 from django.conf import settings
 
@@ -51,10 +51,11 @@ class Post(models.Model):
     slug = models.SlugField(max_length=250, unique_for_date='published')
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_posts')
+        NewUser, on_delete=models.CASCADE, related_name='user_posts')
     status = models.CharField(
         max_length=10, choices=options, default='published')
     image = models.ImageField(upload_to="blogs_image", blank=True, null=True)
+    likes = models.ManyToManyField(NewUser, related_name='liked_posts', blank=True)
     
     objects = PostManager()  # default manager this will have no effect if he comes alone
     postobjects = PostObjects()  # custom manager is used to when we get the data we show only published data
@@ -67,3 +68,14 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class LikesRelation(models.Model):
+    user = models.ForeignKey(NewUser, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    pass
+
+
+class CommentRealtion(models.Model):
+    pass

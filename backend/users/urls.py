@@ -14,7 +14,7 @@ router.register('change_password',ChangeUserPasswordView,basename="change_passwo
 urlpatterns = router.urls
 
 urlpatterns += [
-    path('<str:username>/follow/', FollowView.as_view(), name = "follow"),
+    #path('<str:username>/follow/', FollowView.as_view(), name = "follow"),
     path('register/', CustomUserCreate.as_view(), name="create_user"),
     path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), name="blacklist")
 ]

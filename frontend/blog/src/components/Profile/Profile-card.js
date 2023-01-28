@@ -6,7 +6,7 @@ import { selectUser } from '../../redux/reducers/auth/authSlice';
 import { useRef, useState, useEffect } from 'react';
 import axiosInstance  from '../../axios/authaxios';
 
-const ProfileCard = () => {
+const ProfileCard = ({url}) => {
     const {user_name} = useSelector(selectUser);
     const followersRef = useRef();
     const {id} = useParams();
@@ -19,12 +19,13 @@ const ProfileCard = () => {
     useEffect(()=>{
     const abortCont = new AbortController();
 
-    axiosInstance.get('/user/profile/'+id+'/',{signal: abortCont.signal})
+    axiosInstance.get(url,{signal: abortCont.signal})
     .then(res =>{
         if (res.statusText !== "OK") { // error coming back from server
             throw Error('could not fetch the data for that resource');
         } 
         setData(res.data);
+        console.log(res.data)
         setIsPending(false);
         setError(null);
 
@@ -39,7 +40,7 @@ const ProfileCard = () => {
         })
 
     return () => abortCont.abort();
-    },[])
+    },[id])
 
 
     const handleFollowClick = (e) =>{

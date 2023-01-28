@@ -1,5 +1,5 @@
 import { FaSearch } from "react-icons/fa";
-import PostList from "../posts/postlist";
+import PostList from "../posts/PostList";
 
 
 const Main = () => {
