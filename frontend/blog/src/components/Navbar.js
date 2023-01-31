@@ -1,10 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Usermenu from './Home/Usermenu';
-import axios from 'axios';
-import axiosConfig from '../axios/axios';
-import logo from '../media/blog_image.png'
 import {FaBars, FaRegBell, FaPen} from 'react-icons/fa'
 import { useSelector } from 'react-redux';
 import { selectUser, isUserLoggedIn } from '../redux/reducers/auth/authSlice';

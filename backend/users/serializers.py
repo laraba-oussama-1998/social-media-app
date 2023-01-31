@@ -168,8 +168,7 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta():
         model = FollowerRelation
         fields = "__all__"
-        
-        
+
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 

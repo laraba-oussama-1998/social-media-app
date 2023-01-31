@@ -149,6 +149,10 @@ nav h1 {
     border: transparent ;
 }
 
+.search:focus{
+    outline: none;
+}
+
 .icon-search{
     font-size: 1.5rem;
     color: rgba(69, 69, 69, 0.9);
@@ -210,13 +214,13 @@ nav h1 {
 .blog-post {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
     margin-bottom: 1.8rem;
 }
 
 .blog-post__info {
-    width: 65%;
+    flex-basis: 100%;
 }
 
 .blog-post__img {
@@ -224,6 +228,7 @@ nav h1 {
     min-width: 23rem;
     max-width: 23rem;
     height: 18rem;
+    flex-basis: 33%;
     position: relative;
 }
 
@@ -305,6 +310,7 @@ nav h1 {
     -webkit-line-clamp: 3;
     line-clamp: 2;
     -webkit-box-orient: vertical;
+    
 }
 
 .blog-post__btn {
@@ -335,7 +341,14 @@ nav h1 {
     color: black;
 }
 
-.blog-post__author__bio {
+span.blog-post__author__bio {
+    color: rgb(163, 163, 163);
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-left: 20px;
+}
+
+h5.blog-post__author__bio {
     color: rgb(163, 163, 163);
     font-weight: 500;
 

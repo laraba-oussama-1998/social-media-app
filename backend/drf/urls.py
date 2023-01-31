@@ -27,7 +27,7 @@ from users.views import CustomTokenObtainPairView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name = "blog_api/index.html")),
-    path('api/blog/', include('blog_api.urls', namespace='blog_api')),
+    path('api/', include('blog_api.urls', namespace='blog_api')),
     path('api/user/', include('users.urls', namespace='users')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../axios/authaxios";
 
-const UseFetch = (url) => {
+const  UseFetch =  (url) => {
 
     const [data, setData] = useState(null);
     const [isPending, setIsPending] = useState(null);
@@ -31,7 +31,12 @@ const UseFetch = (url) => {
 
     return () => abortCont.abort();
     },[url])
-    return {data , isPending, error};
+    const setDataValue = (value) => {
+        setData(value);
+      };
+    
+    
+    return {data, setDataValue, isPending, error};
 }
 
 export default UseFetch;

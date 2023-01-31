@@ -22,7 +22,7 @@ function App() {
           <Route  exact path="/reset-password" element = {<Resetpassword />} />
           <Route  exact path="/reset-password/:token" element = {<Resetpassword />} />
           <Route  exact path="/register" element = {<Register />} />
-          <Route exact path="/profile/:id" element={
+          <Route exact path="/profile/:id/*" element={
                 <div>
                   <Profile/>
                   
@@ -32,6 +32,7 @@ function App() {
                   <ProfileUpdate/>
                   
                 </div>} />
+
         </Routes>
       
     </BrowserRouter>
