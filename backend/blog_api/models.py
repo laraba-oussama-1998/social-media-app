@@ -27,6 +27,9 @@ class PostManager(models.Manager):
     def search(self, query=None):
         return self.get_queryset().search(query=query)
     
+    def categorized(self, query=None):
+        return self.get_queryset().filter(category__name=query, status='published')
+    
     def published(self, query=None):
         return self.get_queryset().filter(status='published')
     

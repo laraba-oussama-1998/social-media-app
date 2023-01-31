@@ -44,8 +44,9 @@
     font-size: 1.5rem;
     color: black;
     font-weight: 500;
-    overflow: visible;
+    white-space: pre-line
 }
+
 
 .post-btn{
     display: inline-block;

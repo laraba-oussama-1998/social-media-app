@@ -84,9 +84,13 @@ const PostDetail = () => {
                             <img src={post.image} alt="" />
                         </div>
                         }
-                        <p className="post-text">
-                            {post.content}
-                        </p>
+                        <pre >
+                            <p className="post-text">
+                            
+                                {post.content}
+                            
+                            </p>
+                        </pre>
                     
                 </div>
                 

@@ -29,7 +29,9 @@ const Post = ({post}) => {
                         </h1>
                     
                         <p className="blog-post__text">
+                        
                             {post.content}
+                        
                         </p>
                     </Link>
                     <a href="#" className="blog-post__btn">{post.category}</a>

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from blog_api.models import Post, LikesRelation
+from blog_api.models import Post, LikesRelation, Category
 from users.serializers import ProfileSerializer
 import json
 
@@ -61,9 +61,15 @@ class PostSerializer(serializers.ModelSerializer):
         return obj.likes.count()
     
 
+class CategorySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Category
+        fields = "__all__"
+        read_only_fields =  ['name']
 
 class LikeSerializer(serializers.ModelSerializer):
     
-    class meta:
+    class Meta:
         model = LikesRelation
         fields = '__all__'

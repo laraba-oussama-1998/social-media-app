@@ -149,6 +149,10 @@ nav h1 {
     border: transparent ;
 }
 
+.search:focus{
+    outline: none;
+}
+
 .icon-search{
     font-size: 1.5rem;
     color: rgba(69, 69, 69, 0.9);
@@ -306,6 +310,7 @@ nav h1 {
     -webkit-line-clamp: 3;
     line-clamp: 2;
     -webkit-box-orient: vertical;
+    
 }
 
 .blog-post__btn {

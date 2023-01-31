@@ -1,13 +1,13 @@
 from django.shortcuts import render,get_object_or_404
-from .models import Post
-from .serializers import PostSerializer
+from .models import Post, Category
+from .serializers import PostSerializer, CategorySerializer
 from rest_framework.permissions import SAFE_METHODS,BasePermission,IsAuthenticatedOrReadOnly\
                                         ,IsAuthenticated,DjangoModelPermissionsOrAnonReadOnly,AllowAny
-from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
-
+from rest_framework import viewsets,generics, filters
 from rest_framework.views import APIView
+from django.db.models import Count
 
 
 # create custom permissions to allow post editing only for authors
@@ -27,6 +27,8 @@ class PostUserWritePermission(BasePermission):
 class PostView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, PostUserWritePermission]
     serializer_class = PostSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'content']
 
     def get_object(self, queryset = None, **kwargs):
         # here the pk is reference to the url arguments not the primary key of the post model
@@ -39,12 +41,20 @@ class PostView(viewsets.ModelViewSet):
         return obj
 
     def get_queryset(self):
-        return Post.objects.published()
+
+        query = self.request.query_params.get('category')
+        print(query)
+        if query is None:
+            return Post.objects.published()
+        else:
+            return Post.objects.categorized(query=query)
+        
+
+
     
     @action(detail=True, methods=['get'])
     def userposts(self, request, pk=None):
-    
-        user = request.user
+        
         user_posts = Post.objects.filter(author__user_name=pk)
         
         if not user_posts.exists():
@@ -82,6 +92,15 @@ class LikeView(APIView):
         return Response(serializer.data)
 
 
+class CategoryList(generics.ListAPIView):
+    
+    queryset = Category.objects.all()
+
+    def list(self, request):
+        queryset = self.get_queryset().filter(post__status="published")
+        queryset = queryset.annotate(num_posts=Count('post')).order_by('-num_posts')[:4]
+        serializer_class = CategorySerializer(queryset, many=True)
+        return Response(serializer_class.data)
 
 
 # creation of the viewsets views
