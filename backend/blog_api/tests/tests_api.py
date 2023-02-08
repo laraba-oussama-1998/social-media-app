@@ -76,9 +76,10 @@ class PostTests(APITestCase):
         print("test post create")
         image = self.generate_photo_file()
         data = {"title" : "new" , "author" : 1 ,"excerpt" : "new" , "content" : "new",
-                "status": "draft", "image" : image}
+                "status": "draft", "image" : image, "category": "machine learning"}
         url = reverse('blog_api:blogs-list')
         response = self.client.post(url, data, format = 'multipart')
+        
         self.assertEqual(response.status_code,status.HTTP_201_CREATED)
         
         self.client.credentials()
@@ -97,10 +98,11 @@ class PostTests(APITestCase):
                 "author": 1,
                 "excerpt": "New ",
                 "content": "New ",
-                "status": "draft"
+                "status": "draft",
+                "category": ""
             }
         
-        response = self.client.patch(url, updated_data, format='json')
+        response = self.client.put(url, updated_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         # update other user his post
@@ -148,7 +150,7 @@ class PostTests(APITestCase):
         print("test user likes posts")
         self.test_post_3.likes.add(self.test_user)
         posts_liked_by_user_1 = self.test_user.liked_posts.all()
-        print(posts_liked_by_user_1)
+        
         qs = posts_liked_by_user_1.filter(id= self.test_post_3.id)
         seconde_post_has_no_likes = self.test_post_2.likes.all()
         self.assertTrue(qs.exists())
@@ -159,7 +161,6 @@ class PostTests(APITestCase):
                 "action": "like"
             }
         response = self.client.post(url,data,format="json")
-        print(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         posts_liked_by_user_1 = self.test_user.liked_posts.all()
         self.assertEqual(posts_liked_by_user_1.count(), 2)

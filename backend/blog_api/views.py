@@ -5,7 +5,7 @@ from rest_framework.permissions import SAFE_METHODS,BasePermission,IsAuthenticat
                                         ,IsAuthenticated,DjangoModelPermissionsOrAnonReadOnly,AllowAny
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework import viewsets,generics, filters
+from rest_framework import viewsets, generics, filters, status
 from rest_framework.views import APIView
 from django.db.models import Count
 
@@ -29,6 +29,7 @@ class PostView(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'content']
+    
 
     def get_object(self, queryset = None, **kwargs):
         # here the pk is reference to the url arguments not the primary key of the post model
@@ -41,21 +42,58 @@ class PostView(viewsets.ModelViewSet):
         return obj
 
     def get_queryset(self):
-
+        
         query = self.request.query_params.get('category')
-        print(query)
+        
         if query is None:
             return Post.objects.published()
         else:
             return Post.objects.categorized(query=query)
         
 
+    def create(self, request):
+        data = request.data.copy()
+        try:
+            if data["category"] != "":
+                obj, created = Category.objects.get_or_create(name=data["category"].capitalize())
+                obj = Category.objects.get(name=obj)
+                data["category"]= str(obj.id)
+            else: del data["category"]
+        except:pass
+        
+        print(data)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+
+    def update(self, request, pk=None):
+        instance = self.get_object()
+        data = request.data.copy()
+        try:
+            if data["category"] != "":
+                obj, created = Category.objects.get_or_create(name=data["category"].capitalize())
+                obj = Category.objects.get(name=obj)
+                data["category"]= str(obj.id)
+            else: del data["category"]
+        except:pass
+        
+        serializer = self.get_serializer(instance, data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     
     @action(detail=True, methods=['get'])
     def userposts(self, request, pk=None):
-        
-        user_posts = Post.objects.filter(author__user_name=pk)
+        queryset = self.get_queryset()
+        if request.user.user_name == pk:
+            user_posts = Post.objects.filter(author__user_name=pk)
+        else: user_posts = queryset.filter(author__user_name=pk)
         
         if not user_posts.exists():
             return Response({"detail": "User not found"}, status=404)

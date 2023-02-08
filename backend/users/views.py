@@ -99,6 +99,12 @@ class ProfileView(viewsets.ModelViewSet):
             
         
         return Response(status=200)
+    
+    
+    @action(detail=False, methods=['get'])
+    def following(self, request):
+        serializer = self.get_serializer(request.user.following.all(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class FollowView(APIView):

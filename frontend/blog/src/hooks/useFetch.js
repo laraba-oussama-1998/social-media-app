@@ -9,12 +9,15 @@ const  UseFetch =  (url) => {
 
     useEffect(()=>{
     const abortCont = new AbortController();
-
+    console.log(url)
     axiosInstance.get(url,{signal: abortCont.signal})
     .then(res =>{
+        console.log(res)
         if (res.statusText !== "OK") { // error coming back from server
             throw Error('could not fetch the data for that resource');
         } 
+        console.log(url)
+        console.log(res.data)
         setData(res.data);
         setIsPending(false);
         setError(null);
@@ -33,7 +36,7 @@ const  UseFetch =  (url) => {
     },[url])
     const setDataValue = (value) => {
         setData(value);
-      };
+    };
     
     
     return {data, setDataValue, isPending, error};

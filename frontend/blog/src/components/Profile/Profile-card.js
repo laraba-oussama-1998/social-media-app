@@ -25,7 +25,6 @@ const ProfileCard = ({url}) => {
             throw Error('could not fetch the data for that resource');
         } 
         setData(res.data);
-        console.log(res.data)
         setIsPending(false);
         setError(null);
 
