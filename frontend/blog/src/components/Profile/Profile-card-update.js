@@ -7,8 +7,9 @@ const ProfileCardUpdate = ({username, card}) => {
 
     const [formData, setFormData] = useState(card);
     const dispatch = useDispatch();
-
+    
     const handleChange = (e)=>{
+        e.preventDefault()
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
@@ -16,12 +17,11 @@ const ProfileCardUpdate = ({username, card}) => {
     };
     
     const handleUpload = (e)=>{
-        
+        e.preventDefault()
         setFormData({
             ...formData,
             avatar:{ preview: URL.createObjectURL(e.target.files[0]),
                     file: e.target.files[0]}
-
         });
         
     }
@@ -68,7 +68,7 @@ const ProfileCardUpdate = ({username, card}) => {
                                 alt="profile-image"/>
                         </div>
                         <div className="fs-4 my-3  btn btn-outline-primary text-center">
-                            <input type="file" id="myFile" name="avatar"  className='file-input'
+                            <input type="file" id="myFile" name="avatar" className='file-input'
                             
                             onChange={handleUpload}/>
                             Upload New image

@@ -6,6 +6,54 @@ const baseURL = axiosConfig.baseURL;
 const axiosInstance = axios.create(axiosConfig);
 
 
+let access_token = localStorage.getItem('access_token')
+				?  localStorage.getItem('access_token')
+				: null
+
+let refresh_token = localStorage.getItem('refresh_token')
+				?  localStorage.getItem('refresh_token')
+				: null
+
+axiosInstance.interceptors.request.use(async req => {
+    if(!access_token){
+        access_token = localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null
+        req.headers.Authorization = `JWT ${access_token}`
+    }
+	if (req.url === "token/") return req
+    
+	const access_tokenParts = JSON.parse(atob(access_token.split('.')[1]));
+	
+		// exp date in token is expressed in seconds, while now() returns milliseconds:
+	let now = Math.ceil(Date.now() / 1000);
+	
+	if (access_tokenParts.exp > now){
+		return req
+		
+	}else{
+		
+		const refresh_tokenParts = JSON.parse(atob(access_token.split('.')[1]));
+		// exp date in token is expressed in seconds, while now() returns milliseconds:
+		now = Math.ceil(Date.now() / 1000);
+		
+		if (refresh_tokenParts.exp > now){
+			
+			const response = await axios.post(`${baseURL}token/refresh/`, {
+				refresh: refresh_token
+				});
+		
+			localStorage.setItem('access_token', JSON.stringify(response.data.access))
+			req.headers.Authorization = `JWT ${response.data.access}`
+			return req
+
+		}else{
+			localStorage.removeItem('access_token')
+			localStorage.removeItem('refresh_token')
+			window.location.href = '/login/'
+		}
+	}
+    
+})
+
 axiosInstance.interceptors.response.use(
 	(response) => {
 		return response;
@@ -33,7 +81,8 @@ axiosInstance.interceptors.response.use(
 		if (
 			error.response.data.code === 'token_not_valid' &&
 			error.response.status === 401 &&
-			error.response.statusText === 'Unauthorized'
+			error.response.statusText === 'Unauthorized' &&
+			!originalRequest._retry
 		) {
 			
 			const refreshToken = localStorage.getItem('refresh_token'); 
@@ -52,16 +101,21 @@ axiosInstance.interceptors.response.use(
 						.then((response) => {
 							console.log("refreshements")
 							localStorage.setItem('access_token', response.data.access);
+							console.log("refreshements "+response.data.access)
 							
 							axiosInstance.defaults.headers['Authorization'] =
 								'JWT ' + response.data.access;
 
 							originalRequest.headers['Authorization'] =
-							'JWT ' + response.data.access;
+							'JWT ' + response.data.access; 
 							
-							return axiosInstance(error.response.config);
+							
+							originalRequest._retry = true;
+							
+							return axiosInstance(originalRequest);
 						})
 						.catch((err) => {
+							return Promise.reject(err);
 							console.log("refresh token didn't came")
 							console.log(err);
 						});
@@ -79,6 +133,6 @@ axiosInstance.interceptors.response.use(
 		return Promise.reject(error);
 	}
 );
-
-
+/*
+*/
 export default axiosInstance;

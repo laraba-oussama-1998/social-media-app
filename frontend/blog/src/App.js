@@ -22,16 +22,8 @@ function App() {
           <Route  exact path="/reset-password" element = {<Resetpassword />} />
           <Route  exact path="/reset-password/:token" element = {<Resetpassword />} />
           <Route  exact path="/register" element = {<Register />} />
-          <Route exact path="/profile/:id/*" element={
-                <div>
-                  <Profile/>
-                  
-                </div>} />
-          <Route exact path="/profile-update/:id" element={
-                <div>
-                  <ProfileUpdate/>
-                  
-                </div>} />
+          <Route exact path="/profile/:id/*" element={<Profile/>} />
+          <Route exact path="/profile-update/:id" element={<ProfileUpdate/>} />
 
         </Routes>
       

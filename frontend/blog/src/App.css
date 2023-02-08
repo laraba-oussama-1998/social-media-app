@@ -147,6 +147,7 @@ nav h1 {
 
 .search {
     border: transparent ;
+    width: 100%;
 }
 
 .search:focus{
@@ -216,6 +217,7 @@ nav h1 {
     display: flex;
     align-items: stretch;
     justify-content: space-between;
+    flex-direction: column;
     margin-bottom: 1.8rem;
 }
 
@@ -224,10 +226,10 @@ nav h1 {
 }
 
 .blog-post__img {
-    padding: 3rem 0 3rem 3rem;
+    padding: 1rem 0 1rem 3rem;
     min-width: 23rem;
     max-width: 23rem;
-    height: 18rem;
+    height: 12rem;
     flex-basis: 33%;
     position: relative;
 }
@@ -874,6 +876,13 @@ a{
     font-size: 1.5rem;
 }
 
+.blog-post-hor{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
 
 
 

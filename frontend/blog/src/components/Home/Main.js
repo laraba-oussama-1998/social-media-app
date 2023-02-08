@@ -10,6 +10,8 @@ const Main = () => {
 
     const {data: categories, isPending, error} = useFetch("category");
     const posts = useFetch("blog");
+    const {data: following, isPending2, error2} = useFetch("user/profile/following/")
+    
     const setDataValue = posts.setDataValue;
     const [search, setSearch] = useState('');
     

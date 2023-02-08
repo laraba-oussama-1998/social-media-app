@@ -145,7 +145,7 @@ class PostTests(APITestCase):
         
         
         url = reverse("users:profile-follow", kwargs={"username":self.test_user_2.user_name})
-        print(url)
+        print("url : "+url)
         data = {
             "action" : "follow"
         }

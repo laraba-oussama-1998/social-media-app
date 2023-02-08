@@ -1,9 +1,32 @@
 import useFetch from "../../hooks/useFetch";
 import Post from "./Post";
+import axiosInstance from "../../axios/authaxios";
+import { useRef } from "react";
 
 const PostList = ({posts:blog}) => {
-    const {data: posts, isPending, error} = {...blog};
-    
+    const {data: posts,setDataValue: setPosts, isPending, error} = {...blog};
+
+    const alert_ref = useRef(null)
+    const handleDelete = (post_id)=>{
+        alert_ref.current.style.display = "block"
+            console.log("deleted successfuly");
+            setTimeout(()=> {
+                alert_ref.current.style.display = "none"
+            },3000)
+        /* 
+        axiosInstance.delete('/blog/'+post_id+"/")
+        .then((res)=>{
+            const filtered_posts = posts.filter(obj => {
+                return obj.id !== post_id;
+            });
+            setPosts(filtered_posts);
+            
+            
+            
+        })
+        .catch((err)=>{console.log(err)})
+        */
+    }
     return ( 
         <>
         <div className="blogs">
@@ -12,10 +35,14 @@ const PostList = ({posts:blog}) => {
         { posts && <>
         <div className="devider"></div>
         {posts.map(post =>(
-            <Post key= {post.id} post={post}/>
+            <Post handleDelete={handleDelete} key= {post.id} post={post}/>
         ))}
         </>}
-            
+        </div>
+        <div className="alert-modal" ref={alert_ref}>
+            <div className="alert alert-success" >
+                <strong>Success!</strong> The post have been deleted successfuly.
+            </div>
         </div>
         </>
     );

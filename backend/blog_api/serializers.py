@@ -5,7 +5,7 @@ import json
 
 class PostSerializer(serializers.ModelSerializer):
     
-    category = serializers.SerializerMethodField(read_only= True)
+    category_name = serializers.SerializerMethodField(read_only= True)
     username = serializers.SerializerMethodField(read_only= True)
     avatar = serializers.SerializerMethodField(read_only= True)
     profession = serializers.SerializerMethodField(read_only= True)
@@ -24,13 +24,16 @@ class PostSerializer(serializers.ModelSerializer):
                     'title',
                     'content',
                     'category',
+                    'category_name',
                     'date',
                     'status',
                     'image',
                     'is_liked',
                     'likes_count') 
+        
     
-    def get_category(self,obj):
+    
+    def get_category_name(self,obj):
         return obj.category.name
     
     def get_username(self,obj):
@@ -59,6 +62,19 @@ class PostSerializer(serializers.ModelSerializer):
     
     def get_likes_count(self,obj):
         return obj.likes.count()
+    
+    def create(self, validated_data):
+        return Post.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        
+        instance.email = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        instance.image = validated_data.get('image', instance.image)
+        instance.status = validated_data.get('status', instance.status)
+        instance.category = validated_data.get('category', instance.category)
+        instance.save()
+        return instance
     
 
 class CategorySerializer(serializers.ModelSerializer):

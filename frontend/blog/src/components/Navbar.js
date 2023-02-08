@@ -4,12 +4,10 @@ import {FaBars, FaRegBell, FaPen} from 'react-icons/fa'
 import { useSelector } from 'react-redux';
 import { selectUser, isUserLoggedIn } from '../redux/reducers/auth/authSlice';
 
-
 const Navbar = () => {
     
     const user = useSelector(selectUser);
     const isloggedin = useSelector(isUserLoggedIn);
-    
     /* useEffect(()=>{
         if (localStorage.getItem('access_token')){
             setLoggedIn(true);
@@ -40,13 +38,13 @@ const Navbar = () => {
                         </li>
                         
                         <li>
-                            <a href="newBlog">
+                            <Link to={"/profile/"+user.user_name+"/create"}>
                                 <div className="write">
                                     <h3>Write</h3>
                                     <FaPen className='write-bell'/>
                                     
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                     </div>
                 }

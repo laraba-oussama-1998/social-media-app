@@ -36,8 +36,8 @@ const Login = () => {
 				//console.log(res);
 				//console.log(res.data);
 			}).catch((err) => {
-                
-                setError(err.response.data.detail.concat(". check your email and password again !"))
+                console.log(err)
+                setError(err.response.data)
             });
         
 	};
