@@ -8,24 +8,23 @@ const PostList = ({posts:blog}) => {
 
     const alert_ref = useRef(null)
     const handleDelete = (post_id)=>{
-        alert_ref.current.style.display = "block"
-            console.log("deleted successfuly");
-            setTimeout(()=> {
-                alert_ref.current.style.display = "none"
-            },3000)
-        /* 
+        
+        
         axiosInstance.delete('/blog/'+post_id+"/")
         .then((res)=>{
             const filtered_posts = posts.filter(obj => {
                 return obj.id !== post_id;
             });
             setPosts(filtered_posts);
-            
-            
+            alert_ref.current.style.display = "block"
+            console.log("deleted successfuly");
+            setTimeout(()=> {
+                alert_ref.current.style.display = "none"
+            },3000)
             
         })
         .catch((err)=>{console.log(err)})
-        */
+        
     }
     return ( 
         <>

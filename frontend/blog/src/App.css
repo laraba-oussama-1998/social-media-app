@@ -418,46 +418,9 @@ h5.blog-post__author__bio {
 /* End Interest */
 
 /* Start Following Section */
-
-.following .reading{
-    display: grid;
-    row-gap: 1.5rem;
-    grid-template-columns: 1fr;
-    margin-top: 2rem;
+.following{
+    margin-bottom: 1.4rem ;
 }
-
-.following .first,
-.following .seconde,
-.following .third {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.following img {
-    filter: grayscale(70%);
-    border: 1px solid gray;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    margin-right: 1.5rem;
-}
-
-.following .info {
-    margin-right: .5rem;
-}
-
-.following h3 {
-    font-size: 1.1rem;
-    color: rgb(50, 50, 50);
-}
-
-.following p {
-    font-size: .9rem;
-    color: rgb(163, 163, 163);
-    font-weight: 500;
-}
-
 .follow-btn {
     border: 1px solid #198754;
     padding: .8rem 2rem;
@@ -491,20 +454,27 @@ h5.blog-post__author__bio {
 .reading-post {
     width: 100%;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.3rem;
+}
+
+.reading-post__info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: space-between;
 }
 
 .reading-post__img {
-    padding: 0 0.6rem 2.3rem 0;
+    padding: 0 0.8rem 0 0;
     min-width: 16rem;
     max-width: 16rem;
-    height: 13rem;
+    height: 11rem;
     position: relative;
 }
 
 .reading-post__img img {
-    filter: grayscale(100%);
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -515,29 +485,38 @@ h5.blog-post__author__bio {
 .reading-post__title {
     font-size: 1.1rem;
     font-weight: 600;
-    margin: 1rem 0 .4rem;
+    margin: 0rem 0 .6rem;
     text-transform: capitalize;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .reading-post__text {
     text-align: justify;
-    margin-bottom: 1rem;
-    font-size: .8rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.8rem;
     color: rgb(117, 117, 117);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+
 }
 
 .reading-post__author {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
-.reading-post__author {
-    display: flex;
-    align-items: center;
-}
 
 .reading-post__author__avatar {
-    filter: grayscale(70%);
     width: 2rem;
     height: 2rem;
     border-radius: 50%;

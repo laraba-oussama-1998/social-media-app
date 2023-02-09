@@ -81,4 +81,15 @@ class LikesRelation(models.Model):
 
 
 class CommentRealtion(models.Model):
-    pass
+    user = models.ForeignKey(NewUser, on_delete=models.CASCADE, blank=True, null=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+    class Meta:
+        ordering = ['-updated', '-created']
+
+    def __str__(self):
+        return self.body[0:50]
+    

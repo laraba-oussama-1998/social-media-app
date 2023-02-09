@@ -99,7 +99,13 @@ class PostView(viewsets.ModelViewSet):
             return Response({"detail": "User not found"}, status=404)
         serializer = self.get_serializer(user_posts.all(), many=True) 
         
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'])
+    def likedposts(self, request):
+        serializer = self.get_serializer(request.user.liked_posts.all(), many=True) 
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LikeView(APIView):

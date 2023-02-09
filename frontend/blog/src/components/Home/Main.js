@@ -10,7 +10,7 @@ const Main = () => {
 
     const {data: categories, isPending, error} = useFetch("category");
     const posts = useFetch("blog");
-    const {data: following, isPending2, error2} = useFetch("user/profile/following/")
+    const {data: following} = useFetch("user/profile/following/")
     
     const setDataValue = posts.setDataValue;
     const [search, setSearch] = useState('');
@@ -41,15 +41,15 @@ const Main = () => {
         })
         
     }
-        
+    
     return ( 
             <div className="section">
             <div className="topics">
                 <div className="div-search">
-                    <input type="text" name="search" id="search" className="search" placeholder="Search"
+                    <input type="search" name="search" id="search" className="search" placeholder="Search"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)} />
-                    <FaSearch type="button" onClick={handleSearch}className="icon-search"/>
+                    <FaSearch type="button" onClick={handleSearch} className="icon-search"/>
                 </div>
                 <h3>My topics:</h3>
                 { error && <div>{ error }</div> }

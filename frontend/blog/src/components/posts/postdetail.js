@@ -3,13 +3,13 @@ import { useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import {AiOutlineDelete} from "react-icons/ai";
-import {FaRegComment} from 'react-icons/fa';
-import {FiHeart, FiSettings} from 'react-icons/fi';
+import {FiSettings} from 'react-icons/fi';
 import './post.css';
 import axiosInstance from "../../axios/authaxios";
 import { selectUser } from "../../redux/reducers/auth/authSlice";
 import { useSelector } from "react-redux";
 import DeleteModal from "./DeleteModal";
+import PostStats from "./PostStats";
 
 
 const PostDetail = () => {
@@ -135,28 +135,10 @@ const PostDetail = () => {
                     
                 </div>
                 
-            <div className="post-stats">
-                <span>
-                    {post.likes_count} likes
-                </span>
-                <span>
-                    100 Comment
-                </span>
+            <PostStats post={(({ likes_count, is_liked }) => ({ likes_count, is_liked }))(post)}
+                handleLikeClick={handleLikeClick}/>
             </div>
-            <div className="devider"></div>
-                <div className="post-action">
-                    <div className={"post-icons-section"+ (post.is_liked? "-active":"")} onClick={handleLikeClick}>
-                        <FiHeart className="post-icon" fill={(post.is_liked? "green":"transparent")} />
-                        <span className="icon-text"> Like</span>
-                    </div>
-                    
-                    
-                    <div className="post-icons-section">
-                        <FaRegComment className="post-icon"  />
-                        <span className="icon-text"> Comment</span>
-                    </div>
-                </div>
-            </div>
+            
             <div className="devider"></div>
             <div ref={modalref} id="myModal" className="dalete-modal">
                 <DeleteModal post_id={post.id} handleDelete={handleDelete}/>

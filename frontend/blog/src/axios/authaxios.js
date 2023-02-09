@@ -15,23 +15,29 @@ let refresh_token = localStorage.getItem('refresh_token')
 				: null
 
 axiosInstance.interceptors.request.use(async req => {
+	
     if(!access_token){
         access_token = localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null
         req.headers.Authorization = `JWT ${access_token}`
     }
 	if (req.url === "token/") return req
-    
-	const access_tokenParts = JSON.parse(atob(access_token.split('.')[1]));
-	
+	let access_tokenParts = Math.ceil(Date.now() / 1000);
+    try{
+		const access_tokenParts = JSON.parse(atob(access_token.split('.')[1])).exp;
+	}catch(error){
+		console.log(error);
+		
+	}
 		// exp date in token is expressed in seconds, while now() returns milliseconds:
+	console.log("here")
 	let now = Math.ceil(Date.now() / 1000);
-	
-	if (access_tokenParts.exp > now){
+
+	if (access_tokenParts > now){
 		return req
 		
 	}else{
 		
-		const refresh_tokenParts = JSON.parse(atob(access_token.split('.')[1]));
+		const refresh_tokenParts = JSON.parse(atob(refresh_token.split('.')[1]));
 		// exp date in token is expressed in seconds, while now() returns milliseconds:
 		now = Math.ceil(Date.now() / 1000);
 		
