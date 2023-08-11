@@ -27,7 +27,7 @@ const authSlice = createSlice({
     },
 })
 
-export const selectUser = (state) => state.auth.user;
+export const selectUser = (state) => state.auth.user? state.auth.user: 'nothing';
 export const isUserLoggedIn = (state) => state.auth.isloggedin;
 
 export const {getUser, updateUser, logout} = authSlice.actions;

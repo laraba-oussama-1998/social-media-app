@@ -6,7 +6,7 @@ const baseURL = axiosConfig.baseURL;
 const axiosInstance = axios.create(axiosConfig);
 
 
-let access_token = localStorage.getItem('access_token')
+/* let access_token = localStorage.getItem('access_token')
 				?  localStorage.getItem('access_token')
 				: null
 
@@ -29,7 +29,7 @@ axiosInstance.interceptors.request.use(async req => {
 		
 	}
 		// exp date in token is expressed in seconds, while now() returns milliseconds:
-	console.log("here")
+	
 	let now = Math.ceil(Date.now() / 1000);
 
 	if (access_tokenParts > now){
@@ -50,7 +50,7 @@ axiosInstance.interceptors.request.use(async req => {
 			localStorage.setItem('access_token', JSON.stringify(response.data.access))
 			req.headers.Authorization = `JWT ${response.data.access}`
 			return req
-
+			
 		}else{
 			localStorage.removeItem('access_token')
 			localStorage.removeItem('refresh_token')
@@ -58,7 +58,7 @@ axiosInstance.interceptors.request.use(async req => {
 		}
 	}
     
-})
+}) */
 
 axiosInstance.interceptors.response.use(
 	(response) => {

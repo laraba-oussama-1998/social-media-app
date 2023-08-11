@@ -61,7 +61,7 @@ class PostView(viewsets.ModelViewSet):
             else: del data["category"]
         except:pass
         
-        print(data)
+        
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
