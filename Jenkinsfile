@@ -1,4 +1,4 @@
-pipline{
+pipeline{
 
     agent any
     stages{
@@ -19,7 +19,7 @@ pipline{
             }
         }
 
-        stage('build'){
+        stage('deploy'){
             steps{
                 echo 'deploying the application'
             }
