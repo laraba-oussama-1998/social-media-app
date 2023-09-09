@@ -11,7 +11,11 @@ pipline{
 
         stage('test'){
             steps{
-                echo 'testing the application'
+                dir('backend/app'){
+                    script{
+                        sh 'python manage.py test'
+                    }
+                }
             }
         }
 

@@ -34,16 +34,16 @@ class PostTests(APITestCase):
         
         
         self.test_post = Post.objects.create(
-            category_id=1, title='Post Title', excerpt='Post Excerpt', content='Post Content', slug='post-title',
-            author_id=1, status='published')
+            category_id=self.test_category.pk, title='Post Title', excerpt='Post Excerpt', content='Post Content', slug='post-title',
+            author_id=self.test_user.pk, status='published')
         
         self.test_post_2 = Post.objects.create(
-            category_id=1, title='Post Title', excerpt='Post Excerpt', content='Post Content', slug='post-title',
-            author_id=1, status='draft')
+            category_id=self.test_category.pk, title='Post Title', excerpt='Post Excerpt', content='Post Content', slug='post-title',
+            author_id=self.test_user.pk, status='draft')
         
         self.test_post_3 = Post.objects.create(
-            category_id=1, title='Post Title 2', excerpt='Post Excerpt 2', content='Post Content 2', slug='post-title 2',
-            author_id=2, status='published')
+            category_id=self.test_category.pk, title='Post Title 2', excerpt='Post Excerpt 2', content='Post Content 2', slug='post-title 2',
+            author_id=self.test_user_2.pk, status='published')
     
     def generate_photo_file(self):
         file = io.BytesIO()
@@ -62,21 +62,25 @@ class PostTests(APITestCase):
         self.assertEqual(Post.objects.count(),3)
         # ensure the post view return only the published
         self.assertEqual(Post.objects.published().count(),len(response.data))
+        
+        print("test post list worked")
 
 
     def test_get_post(self):
         print("test post retrieve")
-        url = reverse('blog_api:blogs-detail', kwargs={'pk': 1})
-        response = self.client.get(url, format='json')
         
+        url = reverse('blog_api:blogs-detail', kwargs={'pk': self.test_post.pk})
+        
+        response = self.client.get(url, format='json')
+        print(response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
     def test_create(self):
         print("test post create")
         image = self.generate_photo_file()
-        data = {"title" : "new" , "author" : 1 ,"excerpt" : "new" , "content" : "new",
-                "status": "draft", "image" : image, "category": "machine learning"}
+        data = {"title" : "new" , "author" : self.test_user.pk ,"excerpt" : "new" , "content" : "new",
+                "status": "draft", "image" : image, "category": self.test_category.pk}
         url = reverse('blog_api:blogs-list')
         response = self.client.post(url, data, format = 'multipart')
         
@@ -89,24 +93,24 @@ class PostTests(APITestCase):
 
     def test_update_post(self):
         
-        print("test post update")
+        print("test post update", self.test_post.pk, self.test_post.id)
         # update the his post
-        url = reverse('blog_api:blogs-detail', kwargs={'pk': 1})
+        url = reverse('blog_api:blogs-detail', kwargs={'pk': self.test_post.pk})
         
         updated_data = {
                 "title": "New ",
-                "author": 1,
+                "author": self.test_user.pk,
                 "excerpt": "New ",
                 "content": "New ",
                 "status": "draft",
-                "category": ""
+                "category": self.test_category.pk
             }
         
         response = self.client.put(url, updated_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         # update other user his post
-        url = reverse('blog_api:blogs-detail', kwargs={'pk': 3})
+        url = reverse('blog_api:blogs-detail', kwargs={'pk': self.test_post_3.pk})
         
         response = self.client.put(
             url, updated_data, format='multipart')
@@ -118,14 +122,14 @@ class PostTests(APITestCase):
             
         print("test post delete")
         # update the his post
-        url = reverse('blog_api:blogs-detail', kwargs={'pk': 1})
+        url = reverse('blog_api:blogs-detail', kwargs={'pk': self.test_post_2.pk})
         
         response = self.client.delete(url)
         
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         
         # delete other user post
-        url = reverse('blog_api:blogs-detail', kwargs={'pk': 3})
+        url = reverse('blog_api:blogs-detail', kwargs={'pk': self.test_post_3.pk})
         
         response = self.client.delete(url)
         
@@ -156,7 +160,7 @@ class PostTests(APITestCase):
         self.assertTrue(qs.exists())
         self.assertFalse(seconde_post_has_no_likes.exists())
         
-        url = reverse('blog_api:like', kwargs={'post_id':2})
+        url = reverse('blog_api:like', kwargs={'post_id':self.test_post_2.pk})
         data={ 
                 "action": "like"
             }
@@ -165,7 +169,7 @@ class PostTests(APITestCase):
         posts_liked_by_user_1 = self.test_user.liked_posts.all()
         self.assertEqual(posts_liked_by_user_1.count(), 2)
         
-        url = reverse('blog_api:like', kwargs={'post_id':2})
+        url = reverse('blog_api:like', kwargs={'post_id':self.test_post_2.pk})
         data={ 
                 "action": "unlike"
             }

@@ -55,7 +55,7 @@ const Register = () => {
                             'JWT ' + localStorage.getItem('access_token');
                         
                         dispatch(getUser(jwtDecode(localStorage.getItem('access_token'))["profile"]));
-                        navigate('/profile')
+                        navigate('/')
                         //console.log(res);
                         //console.log(res.data);
                     }).catch((logerr)=>{

@@ -85,13 +85,17 @@ WSGI_APPLICATION = 'drf.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default':{
+        'ENGINE':'django.db.backends.postgresql',
+        'NAME': 'socialApp',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'postgres_db',  
+        'PORT': 5432,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -215,7 +219,7 @@ CORS_ALLOWED_ORIGINS = [
 
 
 # Actual directory user files go to
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR),'backend', 'media')
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR),'app', 'media')
 
 # URL used to access the media
 MEDIA_URL = '/media/'

@@ -1,0 +1,10 @@
+version: '3'
+services:
+  frontapp:
+    image: frontend_social:latest
+    container_name: react_container
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/home/app/src
+    command: npm start 
